@@ -3,6 +3,7 @@ package datavisualizer;
 import com.sun.javafx.scene.control.skin.SliderSkin;
 import graphing.Plotter;
 import graphing.ZoomScrollBar;
+import graphing.ZoomScrollBar_1;
 import java.util.concurrent.ExecutorService;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
@@ -33,28 +34,16 @@ public class DataVisualizer extends Application {
         plot2.dataPoints.addAll(new Point(0, 10), new Point(20, 30), new Point(40, 90), new Point(60, 30), new Point(90, 20));
         plot2.plot.setStroke(Color.RED);
         
-        DoubleProperty xZoom = new SimpleDoubleProperty(100);
-        
-        Slider s1 = new Slider(10, 500, 0);
-        plot1.minimumXValue.bindBidirectional(s1.valueProperty());
-        plot2.minimumXValue.bindBidirectional(s1.valueProperty());
-        Slider s2 = new Slider(10, 500, 100);
-        plot1.maximumXValue.bind(xZoom.add(s2.valueProperty()));
-        plot2.maximumXValue.bind(xZoom.add(s2.valueProperty()));
-        Slider s3 = new Slider(10, 500, 0);
-        plot1.minimumYValue.bindBidirectional(s3.valueProperty());
-        plot2.minimumYValue.bindBidirectional(s3.valueProperty());
-        Slider s4 = new Slider(10, 500, 100);
-        plot1.maximumYValue.bindBidirectional(s4.valueProperty());
-        plot2.maximumYValue.bindBidirectional(s4.valueProperty());
-        
         StackPane root = new StackPane();
         root.getChildren().addAll(plot1, plot2);
         
-        ZoomScrollBar zcb = new ZoomScrollBar(0, 100, 50);
-        zcb.zoom.set(2);
+        ZoomScrollBar_1 zcb = new ZoomScrollBar_1(0, 100, 20, 50);
+        plot1.minimumXValue.bindBidirectional(zcb.currentMinValue);
+        plot2.minimumXValue.bindBidirectional(zcb.currentMinValue);
+        plot1.maximumXValue.bindBidirectional(zcb.currentMaxValue);
+        plot2.maximumXValue.bindBidirectional(zcb.currentMaxValue);
         
-        VBox sliders = new VBox(root, s1, s2, s3, s4, zcb);
+        VBox sliders = new VBox(root, zcb);
 
         Scene scene = new Scene(sliders);
 
