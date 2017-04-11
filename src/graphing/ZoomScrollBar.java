@@ -4,7 +4,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.effect.DropShadow;
@@ -93,14 +92,14 @@ public class ZoomScrollBar extends Region {
             double max = currentMaxValue.get() + positionToValue(dragLength);
             if(zoomEvent) {
                 if(leftHandle) {
-                    if(min < currentMaxValue.get()) //Mangler minimumlængde...
+                    if(min < currentMaxValue.get() && currentMaxValue.get()-min >= MINIMUM_KNOB_LENGTH)
                         currentMinValue.set(Math.max(min, minimumValue.get()));
                 } else {
-                    if(max > currentMinValue.get()) //Mangler minimumlængde...
+                    if(max > currentMinValue.get() && max-currentMinValue.get() >= MINIMUM_KNOB_LENGTH)
                         currentMaxValue.set(Math.min(max, maximumValue.get()));
                 }
             } else {
-                if(min < max) { //Mangler minimumlængde...
+                if(min < max) {
                     double delta = 0;
                     if(min < minimumValue.get())
                         delta = min-minimumValue.get();
