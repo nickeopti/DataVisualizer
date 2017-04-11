@@ -125,8 +125,6 @@ public class ZoomScrollBar extends Region {
      */
     private double knobPosition(double val) { //val = x
         double l = isHorizontal.get() ? knob.getWidth() : knob.getHeight(); //Length of the knob
-        double w = isHorizontal.get() ? getWidth() : getHeight(); //Length of the control
-        double i = knobInset();
         double m = (val - minimumValue.get()) / (maximumValue.get() - minimumValue.get()) * (trackLength() - l) + knobInset();
         
         return m;
