@@ -19,7 +19,7 @@ import javafx.scene.shape.StrokeType;
 public class ZoomScrollBar extends Region {
     
     public BooleanProperty isHorizontal;
-    public DoubleProperty minimumValue, maximumValue, currentValue, zoom;
+    public DoubleProperty minimumValue, maximumValue, currentValue, zoom, span;
     
     protected final double BOUNDARY_STROKE_WIDTH = 2;
     protected final double ZOOM_AREA_LENGTH = 10;
@@ -82,6 +82,8 @@ public class ZoomScrollBar extends Region {
                 zoom.set(1);
             requestLayout();
         });
+        
+        span = new SimpleDoubleProperty();
     }
     
     Point2D dragStartPos;
@@ -117,6 +119,8 @@ public class ZoomScrollBar extends Region {
                 currentValue.set(knobValue(s));
                 zoom.set(knobZoom(l_1));
                 //
+                
+                span.set(knobLength(zoom.get())/trackLength() * (maximumValue.get()-minimumValue.get()) + minimumValue.get());
             } else
                 currentValue.set(knobValue( knobPosition(currentValue.get()) + dragLength ));
             
@@ -178,6 +182,7 @@ public class ZoomScrollBar extends Region {
             knob.setHeight(knobLength(zoom.get()));
             knob.relocate(BOUNDARY_STROKE_WIDTH, knobPosition(currentValue.get()));
         }
+        span.set(knobLength(zoom.get())/trackLength() * (maximumValue.get()-minimumValue.get()) + minimumValue.get());
     }
 
     @Override
