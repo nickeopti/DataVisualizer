@@ -100,7 +100,6 @@ public class ZoomScrollBar extends Region {
             
             currentValue.set(knobValue( knobPosition(currentValue.get()) + dragLength ));
             
-            //currentValue.set(val*(maximumValue.get()-minimumValue.get()) + minimumValue.get());
             requestLayout();
             
             System.out.println("val: " + currentValue.get());
@@ -132,32 +131,36 @@ public class ZoomScrollBar extends Region {
     
     private double knobValue(double pos) { //pos = m
         double l = isHorizontal.get() ? knob.getWidth() : knob.getHeight(); //Length of the knob
-        double w = isHorizontal.get() ? getWidth() : getHeight(); //Length of the control
-        double i = knobInset();
         double x = (pos-knobInset()) / (trackLength() - l) * (maximumValue.get() - minimumValue.get()) + minimumValue.get();
         
         return x;
     }
     
     private double knobLength(double zoom) {
-        return 0;
-        //return (boundary.getWidth()-BOUNDARY_STROKE_WIDTH*2)/zoom.get();
+        return trackLength() / zoom;
+    }
+    
+    private double knobZoom(double length) {
+        return trackLength() / length;
     }
     
     @Override
     protected void layoutChildren() {
         super.layoutChildren(); //May really not be necessary
-        boundary.setWidth(getWidth()-getInsets().getLeft()-getInsets().getRight());
-        boundary.setHeight(getHeight()-getInsets().getTop()-getInsets().getBottom());
-        boundary.relocate(getInsets().getLeft(), getInsets().getTop());
+        Insets insets = getInsets();
+        boundary.setWidth(getWidth()-insets.getLeft()-insets.getRight());
+        boundary.setHeight(getHeight()-insets.getTop()-insets.getBottom());
+        boundary.relocate(insets.getLeft(), insets.getTop());
         if(isHorizontal.get()) {
             knob.setHeight(boundary.getHeight()-BOUNDARY_STROKE_WIDTH*2);
             //compute the width
-            knob.setWidth((boundary.getWidth()-BOUNDARY_STROKE_WIDTH*2)/zoom.get());
+            knob.setWidth(knobLength(zoom.get()));
+            //knob.setWidth((boundary.getWidth()-BOUNDARY_STROKE_WIDTH*2)/zoom.get());
             knob.relocate(knobPosition(currentValue.get()), boundary.getBoundsInParent().getMinY() + BOUNDARY_STROKE_WIDTH);
         } else {
             knob.setWidth(getWidth()-BOUNDARY_STROKE_WIDTH*2);
             //compute the height
+            knob.setHeight(knobLength(zoom.get()));
             knob.relocate(BOUNDARY_STROKE_WIDTH, knobPosition(currentValue.get()));
         }
     }
