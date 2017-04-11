@@ -50,6 +50,19 @@ public class ZoomScrollBar extends Region {
         boundary.setStroke(Color.grayRgb(10));
         boundary.setStrokeWidth(BOUNDARY_STROKE_WIDTH);
         boundary.setStrokeType(StrokeType.INSIDE);
+        isHorizontal.addListener((ob, oldVal, newVal) -> {
+            if(newVal) {
+                boundary.arcHeightProperty().bind(boundary.heightProperty());
+                boundary.arcWidthProperty().bind(boundary.heightProperty());
+                knob.arcHeightProperty().bind(knob.heightProperty());
+                knob.arcWidthProperty().bind(knob.heightProperty());
+            } else {
+                boundary.arcHeightProperty().bind(boundary.widthProperty());
+                boundary.arcWidthProperty().bind(boundary.widthProperty());
+                knob.arcHeightProperty().bind(knob.widthProperty());
+                knob.arcWidthProperty().bind(knob.widthProperty());
+            }
+        });
         boundary.arcHeightProperty().bind(boundary.heightProperty());
         boundary.arcWidthProperty().bind(boundary.heightProperty());
         
