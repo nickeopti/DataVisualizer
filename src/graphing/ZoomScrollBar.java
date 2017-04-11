@@ -153,13 +153,10 @@ public class ZoomScrollBar extends Region {
         boundary.relocate(insets.getLeft(), insets.getTop());
         if(isHorizontal.get()) {
             knob.setHeight(boundary.getHeight()-BOUNDARY_STROKE_WIDTH*2);
-            //compute the width
             knob.setWidth(knobLength(zoom.get()));
-            //knob.setWidth((boundary.getWidth()-BOUNDARY_STROKE_WIDTH*2)/zoom.get());
             knob.relocate(knobPosition(currentValue.get()), boundary.getBoundsInParent().getMinY() + BOUNDARY_STROKE_WIDTH);
         } else {
             knob.setWidth(getWidth()-BOUNDARY_STROKE_WIDTH*2);
-            //compute the height
             knob.setHeight(knobLength(zoom.get()));
             knob.relocate(BOUNDARY_STROKE_WIDTH, knobPosition(currentValue.get()));
         }
