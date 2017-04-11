@@ -100,10 +100,23 @@ public class ZoomScrollBar extends Region {
             double dragLength = isHorizontal.get() ? curPos.getX()-dragStartPos.getX() : curPos.getY()-dragStartPos.getY();
             
             if(zoomEvent) {
+                /*
                 double knobFarEndPos = knobPosition(currentValue.get()) + knobLength(zoom.get());
                 zoom.set(knobZoom( Math.max(knobLength(zoom.get()) + (leftHandle ? -dragLength : dragLength), MINIMUM_KNOB_LENGTH) ));
                 currentValue.set(knobValue(knobFarEndPos-knobLength(zoom.get())));
                 System.out.println("val: " + currentValue.get());
+                */
+                //Testing
+                double x_0 = currentValue.get();
+                double l_0 = knobLength(zoom.get());
+                double l_1 = Math.max(knobLength(zoom.get()) + (leftHandle ? -dragLength : dragLength), MINIMUM_KNOB_LENGTH);
+                double x_1 = ((x_0-minimumValue.get())/(maximumValue.get()-minimumValue.get()) * (trackLength()-l_0) + knobInset() + l_0 - knobInset() - l_1) / (trackLength() - l_1) * (maximumValue.get() - minimumValue.get()) + minimumValue.get();
+                double e = (x_1-minimumValue.get()) / (maximumValue.get()-minimumValue.get()) * (trackLength() - l_1) + knobInset() + l_1;
+                double s = e-l_1;
+                
+                currentValue.set(knobValue(s));
+                zoom.set(knobZoom(l_1));
+                //
             } else
                 currentValue.set(knobValue( knobPosition(currentValue.get()) + dragLength ));
             
