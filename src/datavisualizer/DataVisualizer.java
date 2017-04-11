@@ -51,7 +51,7 @@ public class DataVisualizer extends Application {
         StackPane root = new StackPane();
         root.getChildren().addAll(plot1, plot2);
         
-        ZoomScrollBar zcb = new ZoomScrollBar(0, 100, 0);
+        ZoomScrollBar zcb = new ZoomScrollBar(0, 100, 50);
         zcb.zoom.set(2);
         
         VBox sliders = new VBox(root, s1, s2, s3, s4, zcb);
