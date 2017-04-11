@@ -135,7 +135,6 @@ public class ZoomScrollBar extends Region {
     }
     
     private double valueToPosition(double val) {
-        System.out.println("valToPos: " + ((val - minimumValue.get()) / (maximumValue.get() - minimumValue.get()) * trackLength()));
         return (val - minimumValue.get()) / (maximumValue.get() - minimumValue.get()) * trackLength() + knobInset();
     }
     
