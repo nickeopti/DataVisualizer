@@ -23,7 +23,7 @@ public class ZoomScrollBar extends Region {
     
     protected final double BOUNDARY_STROKE_WIDTH = 2;
     protected final double ZOOM_AREA_LENGTH = 10;
-    
+    protected final double MINIMUM_KNOB_LENGTH = 2*ZOOM_AREA_LENGTH + 5;
     protected final double MINIMUM_LENGTH = 50;
     protected final double MINIMUM_THICKNESS = 10;
     protected final double PREF_THICKNESS = 15;
@@ -82,27 +82,24 @@ public class ZoomScrollBar extends Region {
     Point2D dragStartPos;
     double dragStartValue;
     boolean zoomEvent;
+    boolean leftHandle;
     private void initKnobDragBehaviour() {
         knob.setOnMousePressed((me) -> {
             dragStartPos = localToParent(me.getX(), me.getY());
             dragStartValue = (currentValue.get() - minimumValue.get()) / (maximumValue.get() - minimumValue.get());
-            zoomEvent = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH || me.getX() > knob.getWidth() - ZOOM_AREA_LENGTH
-                    : me.getY() < ZOOM_AREA_LENGTH || me.getY() > knob.getHeight() - ZOOM_AREA_LENGTH;
+            zoomEvent = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH : me.getY() < ZOOM_AREA_LENGTH;
+            leftHandle = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH : me.getY() < ZOOM_AREA_LENGTH;
         });
         knob.setOnMouseDragged((me) -> {
-            double l = isHorizontal.get() ? knob.getWidth() : knob.getHeight(); //Length of the knob
-            double w = isHorizontal.get() ? getWidth() : getHeight(); //Length of the control
-            double i = knobInset();
-            
             Point2D curPos = localToParent(me.getX(), me.getY());
             double dragLength = isHorizontal.get() ? curPos.getX()-dragStartPos.getX() : curPos.getY()-dragStartPos.getY();
-            double val = dragStartValue + dragLength/(w - 2*i - l);
             
-            currentValue.set(knobValue( knobPosition(currentValue.get()) + dragLength ));
+            if(zoomEvent)
+                zoom.set(knobZoom( Math.max(knobLength(zoom.get()) + (leftHandle ? -dragLength : dragLength), MINIMUM_KNOB_LENGTH) ));
+            else 
+                currentValue.set(knobValue( knobPosition(currentValue.get()) + dragLength ));
             
             requestLayout();
-            
-            System.out.println("val: " + currentValue.get());
         });
     }
     
