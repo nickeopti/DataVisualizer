@@ -16,7 +16,7 @@ import javafx.scene.shape.StrokeType;
 /**
  * @author Nicklas Boserup
  */
-public class ZoomScrollBar_1 extends Region {
+public class ZoomScrollBar extends Region {
     
     public BooleanProperty isHorizontal;
     public DoubleProperty minimumValue, maximumValue;
@@ -33,7 +33,7 @@ public class ZoomScrollBar_1 extends Region {
     protected Rectangle knob;
     protected Rectangle boundary;
     
-    public ZoomScrollBar_1(double minSlideVal, double maxSlideVal, double minVal, double maxVal) {
+    public ZoomScrollBar(double minSlideVal, double maxSlideVal, double minVal, double maxVal) {
         initProporties(minSlideVal, maxSlideVal, minVal, maxVal);
         
         knob = new Rectangle(getPrefWidth(), getPrefHeight(), Color.grayRgb(80));
