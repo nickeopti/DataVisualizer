@@ -33,30 +33,7 @@ public class ZoomScrollBar extends Region {
     protected Rectangle boundary;
     
     public ZoomScrollBar(double minSlideVal, double maxSlideVal, double val) {
-        isHorizontal = new SimpleBooleanProperty(true);
-        
-        minimumValue = new SimpleDoubleProperty(minSlideVal);
-        minimumValue.addListener((ob, oldVal, newVal) -> {
-            requestLayout();
-        });
-        maximumValue = new SimpleDoubleProperty(maxSlideVal);
-        maximumValue.addListener((ob, oldVal, newVal) -> {
-            requestLayout();
-        });
-        currentValue = new SimpleDoubleProperty(val);
-        currentValue.addListener((ob, oldVal, newVal) -> {
-            if(newVal.doubleValue() < minimumValue.get())
-                currentValue.set(minimumValue.get());
-            else if(newVal.doubleValue() > maximumValue.get())
-                currentValue.set(maximumValue.get());
-            requestLayout();
-        });
-        zoom = new SimpleDoubleProperty(1);
-        zoom.addListener((ObservableValue<? extends Number> ob, Number oldVal, Number newVal) -> {
-            if(newVal.doubleValue() < 1)
-                zoom.set(1);
-            requestLayout();
-        });
+        initProporties(minSlideVal, maxSlideVal, val);
         
         knob = new Rectangle(getPrefWidth(), getPrefHeight(), Color.grayRgb(80));
         knob.setStroke(Color.grayRgb(10));
@@ -66,6 +43,7 @@ public class ZoomScrollBar extends Region {
         knob.arcWidthProperty().bind(knob.heightProperty());
         DropShadow knobShadow = new DropShadow(5, Color.grayRgb(30));
         knob.setEffect(knobShadow);
+        
         initKnobDragBehaviour();
         
         boundary = new Rectangle(getPrefWidth(), getPrefHeight(), Color.grayRgb(170));
@@ -77,6 +55,33 @@ public class ZoomScrollBar extends Region {
         
         getChildren().addAll(boundary, knob);
         setPadding(new Insets(5));
+    }
+    
+    private void initProporties(double minSlideVal, double maxSlideVal, double val) {
+        isHorizontal = new SimpleBooleanProperty(true);
+        isHorizontal.addListener((ob, oldVal, newVal) -> requestLayout());
+        
+        minimumValue = new SimpleDoubleProperty(minSlideVal);
+        minimumValue.addListener((ob, oldVal, newVal) -> requestLayout());
+        
+        maximumValue = new SimpleDoubleProperty(maxSlideVal);
+        maximumValue.addListener((ob, oldVal, newVal) -> requestLayout());
+        
+        currentValue = new SimpleDoubleProperty(val);
+        currentValue.addListener((ob, oldVal, newVal) -> {
+            if(newVal.doubleValue() < minimumValue.get())
+                currentValue.set(minimumValue.get());
+            else if(newVal.doubleValue() > maximumValue.get())
+                currentValue.set(maximumValue.get());
+            requestLayout();
+        });
+        
+        zoom = new SimpleDoubleProperty(1);
+        zoom.addListener((ObservableValue<? extends Number> ob, Number oldVal, Number newVal) -> {
+            if(newVal.doubleValue() < 1)
+                zoom.set(1);
+            requestLayout();
+        });
     }
     
     Point2D dragStartPos;
@@ -94,9 +99,12 @@ public class ZoomScrollBar extends Region {
             Point2D curPos = localToParent(me.getX(), me.getY());
             double dragLength = isHorizontal.get() ? curPos.getX()-dragStartPos.getX() : curPos.getY()-dragStartPos.getY();
             
-            if(zoomEvent)
+            if(zoomEvent) {
+                double knobFarEndPos = knobPosition(currentValue.get()) + knobLength(zoom.get());
                 zoom.set(knobZoom( Math.max(knobLength(zoom.get()) + (leftHandle ? -dragLength : dragLength), MINIMUM_KNOB_LENGTH) ));
-            else 
+                currentValue.set(knobValue(knobFarEndPos-knobLength(zoom.get())));
+                System.out.println("val: " + currentValue.get());
+            } else
                 currentValue.set(knobValue( knobPosition(currentValue.get()) + dragLength ));
             
             requestLayout();
