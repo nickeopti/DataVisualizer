@@ -38,6 +38,7 @@ public class DataVisualizer extends Application {
         root.getChildren().addAll(plot1, plot2);
         
         ZoomScrollBar zcb = new ZoomScrollBar(0, 100, 20, 50);
+        zcb.isHorizontal.set(true);
         plot1.minimumXValue.bindBidirectional(zcb.currentMinValue);
         plot2.minimumXValue.bindBidirectional(zcb.currentMinValue);
         plot1.maximumXValue.bindBidirectional(zcb.currentMaxValue);
