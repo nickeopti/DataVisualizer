@@ -3,7 +3,7 @@ package datavisualizer;
 import com.sun.javafx.scene.control.skin.SliderSkin;
 import graphing.Plotter;
 import graphing.ZoomScrollBar;
-import graphing.ZoomScrollBar_1;
+import graphing.ZoomScrollBar;
 import java.util.concurrent.ExecutorService;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
@@ -37,7 +37,7 @@ public class DataVisualizer extends Application {
         StackPane root = new StackPane();
         root.getChildren().addAll(plot1, plot2);
         
-        ZoomScrollBar_1 zcb = new ZoomScrollBar_1(0, 100, 20, 50);
+        ZoomScrollBar zcb = new ZoomScrollBar(0, 100, 20, 50);
         plot1.minimumXValue.bindBidirectional(zcb.currentMinValue);
         plot2.minimumXValue.bindBidirectional(zcb.currentMinValue);
         plot1.maximumXValue.bindBidirectional(zcb.currentMaxValue);
