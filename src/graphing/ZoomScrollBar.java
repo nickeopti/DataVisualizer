@@ -34,36 +34,21 @@ public class ZoomScrollBar extends Region {
     public ZoomScrollBar(double minSlideVal, double maxSlideVal, double minVal, double maxVal) {
         initProporties(minSlideVal, maxSlideVal, minVal, maxVal);
         
-        knob = new Rectangle(getPrefWidth(), getPrefHeight(), Color.grayRgb(80));
+        knob = new Rectangle();
+        knob.setFill(Color.grayRgb(80));
         knob.setStroke(Color.grayRgb(10));
         knob.setStrokeWidth(1);
         knob.setStrokeType(StrokeType.INSIDE);
-        knob.arcHeightProperty().bind(knob.heightProperty());
-        knob.arcWidthProperty().bind(knob.heightProperty());
         DropShadow knobShadow = new DropShadow(5, Color.grayRgb(30));
         knob.setEffect(knobShadow);
         
         initKnobDragBehaviour();
         
-        boundary = new Rectangle(getPrefWidth(), getPrefHeight(), Color.grayRgb(170));
+        boundary = new Rectangle();
+        boundary.setFill(Color.grayRgb(170));
         boundary.setStroke(Color.grayRgb(10));
         boundary.setStrokeWidth(BOUNDARY_STROKE_WIDTH);
         boundary.setStrokeType(StrokeType.INSIDE);
-        isHorizontal.addListener((ob, oldVal, newVal) -> {
-            if(newVal) {
-                boundary.arcHeightProperty().bind(boundary.heightProperty());
-                boundary.arcWidthProperty().bind(boundary.heightProperty());
-                knob.arcHeightProperty().bind(knob.heightProperty());
-                knob.arcWidthProperty().bind(knob.heightProperty());
-            } else {
-                boundary.arcHeightProperty().bind(boundary.widthProperty());
-                boundary.arcWidthProperty().bind(boundary.widthProperty());
-                knob.arcHeightProperty().bind(knob.widthProperty());
-                knob.arcWidthProperty().bind(knob.widthProperty());
-            }
-        });
-        boundary.arcHeightProperty().bind(boundary.heightProperty());
-        boundary.arcWidthProperty().bind(boundary.heightProperty());
         
         getChildren().addAll(boundary, knob);
         setPadding(new Insets(5));
@@ -149,7 +134,7 @@ public class ZoomScrollBar extends Region {
     
     @Override
     protected void layoutChildren() {
-        super.layoutChildren(); //May really not be necessary
+        super.layoutChildren(); //May really not be necessary...
         Insets insets = getInsets();
         boundary.setWidth(getWidth()-insets.getLeft()-insets.getRight());
         boundary.setHeight(getHeight()-insets.getTop()-insets.getBottom());
@@ -158,10 +143,20 @@ public class ZoomScrollBar extends Region {
             knob.setHeight(boundary.getHeight()-BOUNDARY_STROKE_WIDTH*2);
             knob.setWidth(valueToPosition(currentMaxValue.get()) - valueToPosition(currentMinValue.get()));
             knob.relocate(valueToPosition(currentMinValue.get()), knobInset());
+            
+            boundary.setArcWidth(boundary.getHeight());
+            boundary.setArcHeight(boundary.getHeight());
+            knob.setArcWidth(knob.getHeight());
+            knob.setArcHeight(knob.getHeight());
         } else {
             knob.setWidth(getWidth()-BOUNDARY_STROKE_WIDTH*2);
             knob.setHeight(valueToPosition(maximumValue.get()) - valueToPosition(minimumValue.get()));
             knob.relocate(knobInset(), valueToPosition(currentMinValue.get()));
+            
+            boundary.setArcWidth(boundary.getWidth());
+            boundary.setArcHeight(boundary.getWidth());
+            knob.setArcWidth(knob.getWidth());
+            knob.setArcHeight(knob.getWidth());
         }
     }
 
