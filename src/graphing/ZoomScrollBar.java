@@ -11,6 +11,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import threading.ThreadPoolSingleton;
 
 /**
  * @author Nicklas Boserup
@@ -92,14 +93,18 @@ public class ZoomScrollBar extends Region {
     boolean leftHandle;
     private void initKnobDragBehaviour() {
         knob.setOnMousePressed((me) -> {
-            dragStartPos = localToParent(me.getX(), me.getY());
+            dragStartPos = localToScreen(me.getX(), me.getY());
+            System.out.println("pressed local: " + localToScene(me.getX(), 0).getX());
             zoomEvent = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH || me.getX() > knob.getWidth() - ZOOM_AREA_LENGTH
                     : me.getY() < ZOOM_AREA_LENGTH || me.getY() > knob.getHeight() - ZOOM_AREA_LENGTH;
             leftHandle = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH : me.getY() < ZOOM_AREA_LENGTH;
         });
         knob.setOnMouseDragged((me) -> {
-            Point2D curPos = localToParent(me.getX(), me.getY());
+            Point2D curPos = localToScreen(me.getX(), me.getY());
             double dragLength = isHorizontal.get() ? curPos.getX()-dragStartPos.getX() : curPos.getY()-dragStartPos.getY();
+            if(zoomEvent && !leftHandle) //Just why is this the way it is working!? (and it's only working so-so...)
+                dragStartPos = localToScreen(me.getX(), me.getY());
+            System.out.println("drag local: " + localToScreen(curPos));
             
             double min = currentMinValue.get() + positionToValue(dragLength);
             double max = currentMaxValue.get() + positionToValue(dragLength);
