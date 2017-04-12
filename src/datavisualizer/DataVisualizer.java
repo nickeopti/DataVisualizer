@@ -60,6 +60,9 @@ public class DataVisualizer extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        System.out.println(ThreadPoolSingleton.getExecutor());
+        System.out.println(ThreadPoolSingleton.getExecutor());
+        
         launch(args);
     }
 
