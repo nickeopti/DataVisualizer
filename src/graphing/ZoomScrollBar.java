@@ -5,13 +5,11 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import threading.ThreadPoolSingleton;
 
 /**
  * @author Nicklas Boserup
@@ -88,28 +86,30 @@ public class ZoomScrollBar extends Region {
         currentMaxValue.addListener((ob, oldVal, newVal) -> requestLayout());
     }
     
-    Point2D dragStartPos;
-    boolean zoomEvent;
-    boolean leftHandle;
     private void initKnobDragBehaviour() {
+        class ZoomEventHandler {
+            public double x, y;
+            public boolean zoomEvent, leftHandle;
+        }
+        final ZoomEventHandler ze = new ZoomEventHandler();
+        
         knob.setOnMousePressed((me) -> {
-            dragStartPos = localToScreen(me.getX(), me.getY());
-            System.out.println("pressed local: " + localToScene(me.getX(), 0).getX());
-            zoomEvent = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH || me.getX() > knob.getWidth() - ZOOM_AREA_LENGTH
+            ze.x = me.getSceneX();
+            ze.y = me.getSceneY();
+            ze.zoomEvent = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH || me.getX() > knob.getWidth() - ZOOM_AREA_LENGTH
                     : me.getY() < ZOOM_AREA_LENGTH || me.getY() > knob.getHeight() - ZOOM_AREA_LENGTH;
-            leftHandle = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH : me.getY() < ZOOM_AREA_LENGTH;
+            ze.leftHandle = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH : me.getY() < ZOOM_AREA_LENGTH;
         });
+        
         knob.setOnMouseDragged((me) -> {
-            Point2D curPos = localToScreen(me.getX(), me.getY());
-            double dragLength = isHorizontal.get() ? curPos.getX()-dragStartPos.getX() : curPos.getY()-dragStartPos.getY();
-            if(zoomEvent && !leftHandle) //Just why is this the way it is working!? (and it's only working so-so...)
-                dragStartPos = localToScreen(me.getX(), me.getY());
-            System.out.println("drag local: " + localToScreen(curPos));
+            double dragLength = isHorizontal.get() ? me.getSceneX() - ze.x : me.getSceneY() - ze.y;
+            ze.x = me.getSceneX();
+            ze.y = me.getSceneY();
             
             double min = currentMinValue.get() + positionToValue(dragLength);
             double max = currentMaxValue.get() + positionToValue(dragLength);
-            if(zoomEvent) {
-                if(leftHandle) {
+            if(ze.zoomEvent) {
+                if(ze.leftHandle) {
                     if(min < currentMaxValue.get() && currentMaxValue.get()-min >= MINIMUM_KNOB_LENGTH)
                         currentMinValue.set(Math.max(min, minimumValue.get()));
                 } else {
