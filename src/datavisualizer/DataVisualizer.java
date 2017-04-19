@@ -39,7 +39,7 @@ public class DataVisualizer extends Application {
         
         Scene scene = new Scene(g.pane);
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Visual Data Analyzer");
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(500);
