@@ -35,19 +35,20 @@ public class Graph {
         minYVal = new SimpleDoubleProperty();
         maxYVal = new SimpleDoubleProperty();
         
-        hScrollBar = new ZoomScrollBar(0, 100, 20, 50);
+        hScrollBar = new ZoomScrollBar();
         hScrollBar.isHorizontal.set(true);
         hScrollBar.minimumValue.bind(minXVal);
         hScrollBar.maximumValue.bind(maxXVal);
         pane.add(hScrollBar, 1, 1);
         
-        vScrollBar = new ZoomScrollBar(0, 100, 20, 50);
+        vScrollBar = new ZoomScrollBar();
         vScrollBar.isHorizontal.set(false);
         vScrollBar.minimumValue.bind(minYVal);
         vScrollBar.maximumValue.bind(maxYVal);
         pane.add(vScrollBar, 0, 0);
         
         plotPane = new StackPane();
+        setupPlotPaneScrollHandling();
         plotPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         GridPane.setHgrow(plotPane, Priority.ALWAYS);
         GridPane.setVgrow(plotPane, Priority.ALWAYS);
@@ -77,10 +78,30 @@ public class Graph {
                             minYVal.set(Extremes.extremePoint(p.dataPoints, Extremes.Extreme.MINIMUM, Extremes.Coordinate.Y).y);
                             maxYVal.set(Extremes.extremePoint(p.dataPoints, Extremes.Extreme.MAXIMUM, Extremes.Coordinate.Y).y);
                             System.out.println("maxXVal: " + hScrollBar.minimumValue);
+                            if(c.getList().size()-c.getAddedSize() == 0) {
+                                hScrollBar.currentMinValue.set(minXVal.get());
+                                hScrollBar.currentMaxValue.set(maxXVal.get());
+                                vScrollBar.currentMinValue.set(minYVal.get());
+                                vScrollBar.currentMaxValue.set(maxYVal.get());
+                            }
                         }
                     });
                 }
             }
+        });
+    }
+    
+    private void setupPlotPaneScrollHandling() {
+        plotPane.setOnScroll(se -> {
+            if(se.isControlDown()) {
+                
+            } else {
+                hScrollBar.scroll(-se.getDeltaX()/hScrollBar.getZoomFactor());
+                vScrollBar.scroll(-se.getDeltaY()/vScrollBar.getZoomFactor());
+            }
+        });
+        plotPane.setOnZoom(ze -> {
+            
         });
     }
     
