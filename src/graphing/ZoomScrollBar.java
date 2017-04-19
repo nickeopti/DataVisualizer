@@ -21,8 +21,8 @@ public class ZoomScrollBar extends Region {
     public DoubleProperty currentMinValue, currentMaxValue;
     
     protected final double BOUNDARY_STROKE_WIDTH = 2;
-    protected final double ZOOM_AREA_LENGTH = 10;
-    protected final double MINIMUM_KNOB_LENGTH = 2*ZOOM_AREA_LENGTH + 5;
+    protected final static double ZOOM_AREA_LENGTH = 10;
+    protected final static double MINIMUM_KNOB_LENGTH = 2*ZOOM_AREA_LENGTH + 5;
     protected final double MINIMUM_LENGTH = 50;
     protected final double MINIMUM_THICKNESS = 10;
     protected final double PREF_THICKNESS = 15;
@@ -52,6 +52,30 @@ public class ZoomScrollBar extends Region {
         
         getChildren().addAll(boundary, knob);
         setPadding(new Insets(5));
+    }
+    
+    public ZoomScrollBar() {
+        this(0, 0, 0, MINIMUM_KNOB_LENGTH);
+    }
+    
+    public void scroll(double pixelLength) {
+        double min = currentMinValue.get() + positionToValue(pixelLength);
+        double max = currentMaxValue.get() + positionToValue(pixelLength);
+        if (min < max) {
+            double delta = 0;
+            if (min < minimumValue.get()) {
+                delta = min - minimumValue.get();
+            } else if (max > maximumValue.get()) {
+                delta = max - maximumValue.get();
+            }
+            currentMinValue.set(min - delta);
+            currentMaxValue.set(max - delta);
+        }
+    }
+    
+    public double getZoomFactor() {
+        return trackLength()/valueToPosition(currentMaxValue.get()-currentMinValue.get());
+        //return (currentMaxValue.get()-currentMinValue.get())/(maximumValue.get()-minimumValue.get()) * trackLength();
     }
     
     private void initProporties(double minSlideVal, double maxSlideVal, double minVal, double maxVal) {
@@ -95,22 +119,14 @@ public class ZoomScrollBar extends Region {
             double max = currentMaxValue.get() + positionToValue(dragLength);
             if(ze.zoomEvent) {
                 if(ze.leftHandle) {
-                    if(min < currentMaxValue.get() && currentMaxValue.get()-min >= MINIMUM_KNOB_LENGTH)
+                    if(min < currentMaxValue.get() && currentMaxValue.get()-min >= positionToValue(MINIMUM_KNOB_LENGTH))
                         currentMinValue.set(Math.max(min, minimumValue.get()));
                 } else {
-                    if(max > currentMinValue.get() && max-currentMinValue.get() >= MINIMUM_KNOB_LENGTH)
+                    if(max > currentMinValue.get() && max-currentMinValue.get() >= positionToValue(MINIMUM_KNOB_LENGTH))
                         currentMaxValue.set(Math.min(max, maximumValue.get()));
                 }
             } else {
-                if(min < max) {
-                    double delta = 0;
-                    if(min < minimumValue.get())
-                        delta = min-minimumValue.get();
-                    else if(max > maximumValue.get())
-                        delta = max-maximumValue.get();
-                    currentMinValue.set(min-delta);
-                    currentMaxValue.set(max-delta);
-                }
+                scroll(dragLength);
             }
         });
     }
