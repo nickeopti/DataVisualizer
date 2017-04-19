@@ -6,11 +6,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
@@ -83,7 +78,20 @@ public class Plotter extends Region {
             }
         };
         task.setOnSucceeded((e) -> {
-                plot.getElements().setAll(task.getValue());
+            ObservableList<PathElement> pe = null;
+            if(task != null)
+                pe = task.getValue();
+            if(pe != null) {
+                /*ObservableList el = plot.getElements();
+                Observable<>
+                for(int i = 1; i < el.size(); i++) {
+                    ((LineTo) plot.getElements().get(i)).setX(width);
+                }*/
+                plot.getElements().setAll(pe);
+                pe = null;
+                task = null;
+                System.gc();
+            }
         });
         
         ThreadPoolSingleton.getExecutor().execute(task);
