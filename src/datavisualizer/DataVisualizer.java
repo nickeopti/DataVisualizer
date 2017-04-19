@@ -1,6 +1,7 @@
 package datavisualizer;
 
 import com.sun.javafx.scene.control.skin.SliderSkin;
+import graphing.Graph;
 import graphing.Plotter;
 import graphing.ZoomScrollBar;
 import graphing.ZoomScrollBar;
@@ -14,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -28,37 +30,14 @@ public class DataVisualizer extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        GridPane pane = new GridPane();
+        Graph g = new Graph();
+        g.getPlots().add(new Plotter());
+        g.getPlots().get(0).dataPoints.addAll(new Point(0, 10), new Point(20, 30), new Point(40, 90), new Point(60, 30), new Point(90, 20));
+        g.getPlots().add(new Plotter());
+        g.getPlots().get(1).dataPoints.addAll(new Point(0, 100), new Point(30, 50), new Point(60, 90), new Point(90, 10));
+        g.getPlots().get(1).plot.setStroke(Color.RED);
         
-        Plotter plot1 = new Plotter();
-        plot1.dataPoints.addAll(new Point(0, 100), new Point(30, 50), new Point(60, 90), new Point(90, 10));
-        
-        Plotter plot2 = new Plotter();
-        plot2.dataPoints.addAll(new Point(0, 10), new Point(20, 30), new Point(40, 90), new Point(60, 30), new Point(90, 20));
-        plot2.plot.setStroke(Color.RED);
-        
-        pane.add(plot1, 1, 0, 1, 1);
-        pane.add(plot2, 1, 0, 1, 1);
-        
-        StackPane root = new StackPane();
-        //root.getChildren().addAll(plot1, plot2);
-        
-        ZoomScrollBar zcb = new ZoomScrollBar(0, 100, 20, 50);
-        zcb.isHorizontal.set(true);
-        plot1.minimumXValue.bindBidirectional(zcb.currentMinValue);
-        plot2.minimumXValue.bindBidirectional(zcb.currentMinValue);
-        plot1.maximumXValue.bindBidirectional(zcb.currentMaxValue);
-        plot2.maximumXValue.bindBidirectional(zcb.currentMaxValue);
-        
-        ZoomScrollBar zcbv = new ZoomScrollBar(0, 100, 20, 50);
-        zcbv.isHorizontal.set(false);
-        
-        pane.add(zcbv, 0, 0);
-        pane.add(zcb, 1, 1);
-        
-        //VBox sliders = new VBox(root, zcb);
-
-        Scene scene = new Scene(pane);
+        Scene scene = new Scene(g.pane);
 
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
