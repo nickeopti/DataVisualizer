@@ -55,7 +55,6 @@ public class Plotter extends Region {
     protected void layoutChildren() {
         super.layoutChildren();
         final double width = getWidth(), height = getHeight();
-        System.out.println(changeFlag);
         if(lastWidth != width || lastHeight != height || changeFlag) {
             changeFlag = false;
             update();
