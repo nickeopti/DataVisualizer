@@ -4,6 +4,7 @@ import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.layout.Region;
@@ -25,12 +26,19 @@ public class Plotter extends Region {
     public ObservableList<Point> dataPoints;
     public Path plot;
     
+    private boolean changeFlag = false;
+    
     public Plotter() {
         minimumXValue = new SimpleDoubleProperty(0);
+        minimumXValue.addListener((ob, oldVal, newVal) -> {changeFlag = true; requestLayout();});
         maximumXValue = new SimpleDoubleProperty(60);
+        maximumXValue.addListener((ob, oldVal, newVal) -> {changeFlag = true; requestLayout();});
         minimumYValue = new SimpleDoubleProperty(0);
+        minimumYValue.addListener((ob, oldVal, newVal) -> {changeFlag = true; requestLayout();});
         maximumYValue = new SimpleDoubleProperty(100);
+        maximumXValue.addListener((ob, oldVal, newVal) -> {changeFlag = true; requestLayout();});
         dataPoints = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+        dataPoints.addListener((ListChangeListener.Change<? extends Point> c) -> {changeFlag = true; requestLayout();});
         
         plot = new Path();
         plot.setStroke(Color.GREEN);
@@ -42,10 +50,18 @@ public class Plotter extends Region {
         dataPoints.addListener((Observable c) -> update());
     }
 
+    double lastWidth, lastHeight;
     @Override
     protected void layoutChildren() {
         super.layoutChildren();
-        update();
+        final double width = getWidth(), height = getHeight();
+        System.out.println(changeFlag);
+        if(lastWidth != width || lastHeight != height || changeFlag) {
+            changeFlag = false;
+            update();
+            lastWidth = width;
+            lastHeight = height;
+        }
     }
     
     Task<ObservableList<PathElement>>  task;
