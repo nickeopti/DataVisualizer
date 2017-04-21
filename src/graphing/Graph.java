@@ -58,7 +58,7 @@ public class Graph {
         plots.addListener((ListChangeListener.Change<? extends Plotter> c) -> {
             while(c.next()) {
                 for(Plotter p : c.getRemoved()) {
-                    pane.getChildren().remove(p);
+                    plotPane.getChildren().remove(p);
                     p.minimumXValue.unbindBidirectional(hScrollBar.currentMinValue);
                     p.maximumXValue.unbindBidirectional(hScrollBar.currentMaxValue);
                     p.minimumYValue.unbindBidirectional(vScrollBar.currentMinValue);
