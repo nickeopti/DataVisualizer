@@ -46,7 +46,6 @@ public class Plotter extends Region {
         
         getChildren().add(plot);
         
-        setMinSize(100, 300);
         dataPoints.addListener((Observable c) -> update());
     }
 
