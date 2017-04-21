@@ -36,6 +36,7 @@ public class DataVisualizer extends Application {
         g.getPlots().add(new Plotter());
         g.getPlots().get(1).dataPoints.addAll(new Point(0, 100), new Point(30, 50), new Point(60, 90), new Point(90, 10));
         g.getPlots().get(1).plot.setStroke(Color.RED);
+        g.getPlots().remove(0,1);
         
         Scene scene = new Scene(g.pane);
 
