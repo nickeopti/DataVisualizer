@@ -27,7 +27,7 @@ public class TextFileInput extends DataInput {
         try {
             Files.lines(new File(source).toPath()).forEach(e -> {
                 e = e.trim();
-                if(e.indexOf('\t') == -1) return;
+                if(e.indexOf('\t') == -1) return; //Just carry on to the next line...
                 String s0 = e.substring(0, e.indexOf('\t'));
                 String s1 = e.substring(e.indexOf('\t')+1, e.length());
                 try {
