@@ -11,6 +11,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import statistics.Extremes;
@@ -22,8 +23,8 @@ import statistics.Point;
 public class Graph {
     
     public GridPane pane;
-    private ZoomScrollBar hScrollBar, vScrollBar;
-    private ObservableList<Plotter> plots;
+    public ZoomScrollBar hScrollBar, vScrollBar;
+    private final ObservableList<Plotter> plots;
     private StackPane plotPane;
     private DoubleProperty minXVal, maxXVal, minYVal, maxYVal;
     
@@ -63,6 +64,8 @@ public class Graph {
                     p.maximumXValue.unbindBidirectional(hScrollBar.currentMaxValue);
                     p.minimumYValue.unbindBidirectional(vScrollBar.currentMinValue);
                     p.maximumYValue.unbindBidirectional(vScrollBar.currentMaxValue);
+                    
+                    setBarValues();
                 }
                 for(Plotter p : c.getAddedSubList()) {
                     plotPane.getChildren().add(p);
@@ -70,25 +73,35 @@ public class Graph {
                     p.maximumXValue.bindBidirectional(hScrollBar.currentMaxValue);
                     p.minimumYValue.bindBidirectional(vScrollBar.currentMinValue);
                     p.maximumYValue.bindBidirectional(vScrollBar.currentMaxValue);
+                    p.requestLayout();
+                    
                     
                     p.dataPoints.addListener((ListChangeListener.Change<? extends Point> c1) -> {
-                        if(p.dataPoints != null) {
-                            minXVal.set(Extremes.extremePoint(p.dataPoints, Extremes.Extreme.MINIMUM, Extremes.Coordinate.X).x);
-                            maxXVal.set(Extremes.extremePoint(p.dataPoints, Extremes.Extreme.MAXIMUM, Extremes.Coordinate.X).x);
-                            minYVal.set(Extremes.extremePoint(p.dataPoints, Extremes.Extreme.MINIMUM, Extremes.Coordinate.Y).y);
-                            maxYVal.set(Extremes.extremePoint(p.dataPoints, Extremes.Extreme.MAXIMUM, Extremes.Coordinate.Y).y);
-                            System.out.println("maxXVal: " + hScrollBar.minimumValue);
-                            if(c.getList().size()-c.getAddedSize() == 0) {
-                                hScrollBar.currentMinValue.set(minXVal.get());
-                                hScrollBar.currentMaxValue.set(maxXVal.get());
-                                vScrollBar.currentMinValue.set(minYVal.get());
-                                vScrollBar.currentMaxValue.set(maxYVal.get());
-                            }
-                        }
+                        setBarValues();
                     });
                 }
             }
         });
+        
+        //getChildren().add(pane);
+    }
+    
+    private void setBarValues() {
+        double minX = 0, maxX = 0, minY = 0, maxY = 0;
+        for(Plotter pl : plots) {
+            minX = Extremes.extremePoint(pl.dataPoints, Extremes.Extreme.MINIMUM, Extremes.Coordinate.X).x;
+            maxX = Extremes.extremePoint(pl.dataPoints, Extremes.Extreme.MAXIMUM, Extremes.Coordinate.X).x;
+            minY = Extremes.extremePoint(pl.dataPoints, Extremes.Extreme.MINIMUM, Extremes.Coordinate.Y).y;
+            maxY = Extremes.extremePoint(pl.dataPoints, Extremes.Extreme.MAXIMUM, Extremes.Coordinate.Y).y;
+        }
+        minXVal.set(minX);
+        maxXVal.set(maxX);
+        minYVal.set(minY);
+        maxYVal.set(maxY);
+        hScrollBar.currentMinValue.set(minXVal.get());
+        hScrollBar.currentMaxValue.set(maxXVal.get());
+        vScrollBar.currentMinValue.set(minYVal.get());
+        vScrollBar.currentMaxValue.set(maxYVal.get());
     }
     
     private void setupPlotPaneScrollHandling() {
@@ -97,7 +110,7 @@ public class Graph {
                 
             } else {
                 hScrollBar.scroll(-se.getDeltaX()/hScrollBar.getZoomFactor());
-                vScrollBar.scroll(-se.getDeltaY()/vScrollBar.getZoomFactor());
+                vScrollBar.scroll(se.getDeltaY()/vScrollBar.getZoomFactor());
             }
         });
         plotPane.setOnZoom(ze -> {
