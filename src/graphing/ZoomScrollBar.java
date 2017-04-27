@@ -68,6 +68,7 @@ public class ZoomScrollBar extends Region {
             } else if (max > maximumValue.get()) {
                 delta = max - maximumValue.get();
             }
+            System.out.println("delta: " + delta);
             currentMinValue.set(min - delta);
             currentMaxValue.set(max - delta);
         }
@@ -98,7 +99,7 @@ public class ZoomScrollBar extends Region {
     private void initKnobDragBehaviour() {
         class ZoomEventHandler {
             public double x, y;
-            public boolean zoomEvent, leftHandle;
+            public boolean zoomEvent, firstHandle; //firstHandle is the left or upper handle
         }
         final ZoomEventHandler ze = new ZoomEventHandler();
         
@@ -107,7 +108,7 @@ public class ZoomScrollBar extends Region {
             ze.y = me.getSceneY();
             ze.zoomEvent = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH || me.getX() > knob.getWidth() - ZOOM_AREA_LENGTH
                     : me.getY() < ZOOM_AREA_LENGTH || me.getY() > knob.getHeight() - ZOOM_AREA_LENGTH;
-            ze.leftHandle = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH : me.getY() < ZOOM_AREA_LENGTH;
+            ze.firstHandle = isHorizontal.get() ? me.getX() < ZOOM_AREA_LENGTH : me.getY() < ZOOM_AREA_LENGTH;
         });
         
         knob.setOnMouseDragged((me) -> {
@@ -115,10 +116,12 @@ public class ZoomScrollBar extends Region {
             ze.x = me.getSceneX();
             ze.y = me.getSceneY();
             
+            System.out.println("DragLength: " + dragLength + "\nposToVal: " + positionToValue(dragLength));
+            
             double min = currentMinValue.get() + positionToValue(dragLength);
             double max = currentMaxValue.get() + positionToValue(dragLength);
             if(ze.zoomEvent) {
-                if(ze.leftHandle) {
+                if(ze.firstHandle) {
                     if(min < currentMaxValue.get() && currentMaxValue.get()-min >= positionToValue(MINIMUM_KNOB_LENGTH))
                         currentMinValue.set(Math.max(min, minimumValue.get()));
                 } else {
@@ -132,20 +135,30 @@ public class ZoomScrollBar extends Region {
     }
     
     private double knobInset() {
+        //return (isHorizontal.get() ? getInsets().getLeft() : getInsets().getTop()) + BOUNDARY_STROKE_WIDTH;
         return (isHorizontal.get() ? boundary.getBoundsInParent().getMinX() : boundary.getBoundsInParent().getMinY()) + BOUNDARY_STROKE_WIDTH;
     }
     
     private double trackLength() { //Assumes the control is symmetrical...
         double w = isHorizontal.get() ? getWidth() : getHeight(); //Length of the entire control
-        return w - 2*knobInset();
+        //return w - 2*knobInset();
+        return (isHorizontal.get() ? boundary.getWidth() : boundary.getHeight()) - 2*BOUNDARY_STROKE_WIDTH;
     }
     
     private double valueToPosition(double val) {
-        return (val - minimumValue.get()) / (maximumValue.get() - minimumValue.get()) * trackLength() + knobInset();
+        if(isHorizontal.get())
+            return (val - minimumValue.get()) / (maximumValue.get() - minimumValue.get()) * trackLength();
+        else
+            return (maximumValue.get() - val) / (maximumValue.get() - minimumValue.get()) * trackLength();
     }
     
     private double positionToValue(double pos) {
-        return (pos)/trackLength()*(maximumValue.get()-minimumValue.get()) + minimumValue.get();
+        if(isHorizontal.get())
+            //return (trackLength()*pos-knobInset()*trackLength()+maximumValue.get()*minimumValue.get() - Math.pow(minimumValue.get(), 2)) / (maximumValue.get() - minimumValue.get());
+            //return (pos)/trackLength()*(maximumValue.get()-minimumValue.get()) + minimumValue.get();
+            return (pos)/trackLength()*(maximumValue.get()-minimumValue.get()) + minimumValue.get();
+        else
+            return maximumValue.get() - ((trackLength()-pos)/trackLength()*(maximumValue.get() - minimumValue.get()));
     }
     
     @Override
@@ -158,7 +171,10 @@ public class ZoomScrollBar extends Region {
         if(isHorizontal.get()) {
             knob.setHeight(boundary.getHeight()-BOUNDARY_STROKE_WIDTH*2);
             knob.setWidth(valueToPosition(currentMaxValue.get()) - valueToPosition(currentMinValue.get()));
-            knob.relocate(valueToPosition(currentMinValue.get()), knobInset());
+            knob.relocate(valueToPosition(currentMinValue.get())+knobInset(), knobInset());
+            
+            //System.out.println("max: " + maximumValue.get() + "\tcurMax" + currentMaxValue.get() + "\n" +
+              //      "min: " + minimumValue.get() + "\tcurMin" + currentMinValue.get());
             
             boundary.setArcWidth(boundary.getHeight());
             boundary.setArcHeight(boundary.getHeight());
@@ -167,7 +183,11 @@ public class ZoomScrollBar extends Region {
         } else {
             knob.setWidth(boundary.getWidth()-BOUNDARY_STROKE_WIDTH*2);
             knob.setHeight(valueToPosition(currentMaxValue.get()) - valueToPosition(currentMinValue.get()));
-            knob.relocate(knobInset(), valueToPosition(currentMinValue.get()));
+            //knob.relocate(knobInset(), valueToPosition(currentMinValue.get()));
+            knob.relocate(knobInset(), valueToPosition(minimumValue.get()) - valueToPosition(currentMinValue.get()) + knobInset());
+            
+            //System.out.println("max: " + maximumValue.get() + "\tcurMax" + currentMaxValue.get() + "\n" +
+              //      "min: " + minimumValue.get() + "\tcurMin" + currentMinValue.get());
             
             boundary.setArcWidth(boundary.getWidth());
             boundary.setArcHeight(boundary.getWidth());
