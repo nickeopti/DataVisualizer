@@ -1,10 +1,13 @@
 package datavisualizer;
 
 import com.sun.javafx.scene.control.skin.SliderSkin;
+import datainput.TextFileInput;
 import graphing.Graph;
 import graphing.Plotter;
 import graphing.ZoomScrollBar;
 import graphing.ZoomScrollBar;
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
@@ -19,6 +22,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 import statistics.Point;
 import threading.ThreadPoolSingleton;
@@ -38,7 +44,14 @@ public class DataVisualizer extends Application {
         g.getPlots().get(1).plot.setStroke(Color.RED);
         g.getPlots().remove(0,1);
         
+        Stop[] stops = {new Stop(0, Color.GREEN), new Stop(0.7, Color.YELLOW), new Stop(1, Color.RED)};
+        g.getPlots().get(0).plot.setStroke(new LinearGradient(1, 1, 1, 0, true, CycleMethod.NO_CYCLE, stops));
+        
         Scene scene = new Scene(g.pane);
+        
+        System.out.println("path: " + new File("data.txt").getAbsolutePath());
+        TextFileInput tfi0 = new TextFileInput("data.txt");
+        g.getPlots().get(0).dataPoints.setAll(tfi0.readDataPointList());
 
         primaryStage.setTitle("Visual Data Analyzer");
         primaryStage.setScene(scene);
@@ -46,6 +59,7 @@ public class DataVisualizer extends Application {
         primaryStage.setMinWidth(500);
         primaryStage.setOnCloseRequest((e) -> ThreadPoolSingleton.getExecutor().shutdown());
         primaryStage.show();
+        g.pane.requestLayout();
     }
 
     /**
