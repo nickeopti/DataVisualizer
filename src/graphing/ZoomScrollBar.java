@@ -158,7 +158,7 @@ public class ZoomScrollBar extends Region {
             //return (pos)/trackLength()*(maximumValue.get()-minimumValue.get()) + minimumValue.get();
             return (pos)/trackLength()*(maximumValue.get()-minimumValue.get()) + minimumValue.get();
         else
-            return maximumValue.get() - ((trackLength()-pos)/trackLength()*(maximumValue.get() - minimumValue.get()));
+            return maximumValue.get() - ((trackLength()-(pos/trackLength()))*(maximumValue.get() - minimumValue.get()));
     }
     
     @Override
@@ -194,6 +194,8 @@ public class ZoomScrollBar extends Region {
             knob.setArcWidth(knob.getWidth());
             knob.setArcHeight(knob.getWidth());
         }
+        
+        System.out.println("knob: " + knob.toString() + "\tloc: " + knob.getLayoutX() + ", " + knob.getLayoutY());
     }
 
     @Override

@@ -79,6 +79,7 @@ public class Graph {
                     p.dataPoints.addListener((ListChangeListener.Change<? extends Point> c1) -> {
                         setBarValues();
                     });
+                    p.requestLayout();
                 }
             }
         });
@@ -97,7 +98,7 @@ public class Graph {
         minXVal.set(minX);
         maxXVal.set(maxX);
         minYVal.set(minY);
-        maxYVal.set(maxY);
+        maxYVal.set(maxY*1.1);
         hScrollBar.currentMinValue.set(minXVal.get());
         hScrollBar.currentMaxValue.set(maxXVal.get());
         vScrollBar.currentMinValue.set(minYVal.get());

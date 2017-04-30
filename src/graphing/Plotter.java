@@ -46,7 +46,8 @@ public class Plotter extends Region {
         
         getChildren().add(plot);
         
-        dataPoints.addListener((Observable c) -> update());
+        //dataPoints.addListener((Observable c) -> {changeFlag = true; requestLayout();});
+        //dataPoints.addListener((ListChangeListener.Change<? extends Point> c) -> {changeFlag = true; requestLayout();});
     }
 
     double lastWidth, lastHeight;

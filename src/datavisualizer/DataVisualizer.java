@@ -1,14 +1,25 @@
 package datavisualizer;
 
 import com.sun.javafx.scene.control.skin.SliderSkin;
+import datainput.DataInput;
+import datainput.NymarkenDataInput;
+import datainput.TabSeperatedTextFile;
 import datainput.TextFileInput;
 import graphing.Graph;
 import graphing.Plotter;
 import graphing.ZoomScrollBar;
 import graphing.ZoomScrollBar;
+import java.awt.Paint;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -26,7 +37,12 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
+import statistics.GoodOldWay;
 import statistics.Point;
+import statistics.SortPointList;
+import statistics.StatisticalValues;
+import statistics.TimeAndDateFilterList;
+import statistics.TimeAndDateFilterList.TimeRange;
 import threading.ThreadPoolSingleton;
 
 /**
@@ -35,41 +51,47 @@ import threading.ThreadPoolSingleton;
 public class DataVisualizer extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
-        Graph g = new Graph();
-        g.getPlots().add(new Plotter());
-        g.getPlots().get(0).dataPoints.addAll(new Point(0, 10), new Point(20, 30), new Point(40, 90), new Point(60, 30), new Point(90, 20));
-        g.getPlots().add(new Plotter());
-        g.getPlots().get(1).dataPoints.addAll(new Point(0, 100), new Point(30, 50), new Point(60, 90), new Point(90, 10));
-        g.getPlots().get(1).plot.setStroke(Color.RED);
-        g.getPlots().remove(0,1);
+    public void start(Stage primaryStage) throws IOException {
         
-        Stop[] stops = {new Stop(0, Color.GREEN), new Stop(0.7, Color.YELLOW), new Stop(1, Color.RED)};
-        g.getPlots().get(0).plot.setStroke(new LinearGradient(1, 1, 1, 0, true, CycleMethod.NO_CYCLE, stops));
-        
-        Scene scene = new Scene(g.pane);
-        
-        System.out.println("path: " + new File("data.txt").getAbsolutePath());
-        TextFileInput tfi0 = new TextFileInput("data.txt");
-        g.getPlots().get(0).dataPoints.setAll(tfi0.readDataPointList());
+        //setupDataForGraph(g);
 
+        
+        MainUI mainUI = new MainUI();
+        Scene scene = new Scene(mainUI);
+        
         primaryStage.setTitle("Visual Data Analyzer");
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(500);
         primaryStage.setOnCloseRequest((e) -> ThreadPoolSingleton.getExecutor().shutdown());
         primaryStage.show();
-        g.pane.requestLayout();
     }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println(ThreadPoolSingleton.getExecutor());
-        System.out.println(ThreadPoolSingleton.getExecutor());
-        
         launch(args);
     }
-
+    
+    private void setupDataForGraph(Graph g) {
+        DataInput input = new NymarkenDataInput("nyedata.txt");
+        List<Point> data = input.readDataPointList();
+        
+        TimeAndDateFilterList tdfl = new TimeAndDateFilterList();
+        tdfl.excludedDays.add(DayOfWeek.SATURDAY);
+        tdfl.excludedDays.add(DayOfWeek.SUNDAY);
+        tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(0, 0), LocalTime.of(6, 0)));
+        tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(15, 0), LocalTime.of(23, 59)));
+        
+        
+        
+        List<Point>[] q = StatisticalValues.listPerMinute(tdfl.getFilteredList(data));
+        List<Point> fil = new ArrayList<>();
+        for(int i = 1; i < q.length; i++) {
+            fil.add(new Point(i, StatisticalValues.median(q[i])));
+        }
+        g.getPlots().get(0).dataPoints.setAll(fil);
+    }
+    
 }
