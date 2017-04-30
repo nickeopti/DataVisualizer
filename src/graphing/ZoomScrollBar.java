@@ -21,7 +21,7 @@ public class ZoomScrollBar extends Region {
     public DoubleProperty currentMinValue, currentMaxValue;
     
     protected final double BOUNDARY_STROKE_WIDTH = 2;
-    protected final static double ZOOM_AREA_LENGTH = 10;
+    protected final static double ZOOM_AREA_LENGTH = 15;
     protected final static double MINIMUM_KNOB_LENGTH = 2*ZOOM_AREA_LENGTH + 5;
     protected final double MINIMUM_LENGTH = 50;
     protected final double MINIMUM_THICKNESS = 10;
