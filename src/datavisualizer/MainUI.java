@@ -3,11 +3,17 @@ package datavisualizer;
 import graphing.Graph;
 import graphing.Plotter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
@@ -23,6 +29,7 @@ import javafx.scene.shape.SVGPath;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.SegmentedButton;
 import statistics.GoodOldWay;
+import statistics.TimeAndDateFilterList;
 
 /**
  * @author Nicklas Boserup
@@ -30,10 +37,15 @@ import statistics.GoodOldWay;
 public class MainUI extends BorderPane {
     
     private Graph graph;
+    public ObservableList<TimeAndDateFilterList.DateRange> excludedDates;
+    public ObservableList<TimeAndDateFilterList.TimeRange> excludedTimeIntervals;
     
     public MainUI() {
         super();
         graph = convenient();
+        
+        excludedDates = FXCollections.observableArrayList();
+        excludedTimeIntervals = FXCollections.observableArrayList();
         
         setCenter(graph.pane);
         setTop(setupSelectionPanel());
@@ -110,12 +122,25 @@ public class MainUI extends BorderPane {
             DateRangeView drv = new DateRangeView();
             drv.close.setOnMouseClicked(me -> {
                 exclDatesList.getChildren().remove(drv);
-                //Implement removing constraints from the data controller
             });
-            //Implement adding constraints to the data controller
             exclDatesList.getChildren().add(exclDatesList.getChildren().size()-1, drv);
         });
         exclDatesList.getChildren().add(addExclDate);
+        exclDatesList.getChildren().addListener((ListChangeListener.Change<? extends Node> c) -> {
+            List<TimeAndDateFilterList.DateRange> list = new ArrayList<>();
+            for(Node n : exclDatesList.getChildren()) {
+                if(n != null && n instanceof DateRangeView) {
+                    DateRangeView drv = (DateRangeView) n;
+                    TimeAndDateFilterList.DateRange dr;
+                    if(drv.startDate.isBefore(drv.endDate))
+                        dr = new TimeAndDateFilterList.DateRange(drv.startDate, drv.endDate);
+                    else
+                        dr = new TimeAndDateFilterList.DateRange(drv.endDate, drv.startDate);
+                    list.add(dr);
+                }
+            }
+            excludedDates.setAll(list);
+        });
         
         PopOver exclDatesPop = new PopOver(exclDatesList);
         exclDatesPop.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
@@ -150,12 +175,25 @@ public class MainUI extends BorderPane {
             TimeRangeView trv = new TimeRangeView();
             trv.close.setOnMouseClicked(me -> {
                 exclTimesList.getChildren().remove(trv);
-                //Implement removing constraints from the data controller
             });
-            //Implement adding constraints to the data controller
             exclTimesList.getChildren().add(exclTimesList.getChildren().size()-1, trv);
         });
         exclTimesList.getChildren().add(addExclTime);
+        exclTimesList.getChildren().addListener((ListChangeListener.Change<? extends Node> c) -> {
+            List<TimeAndDateFilterList.TimeRange> list = new ArrayList<>();
+            for(Node n : exclTimesList.getChildren()) {
+                if(n != null && n instanceof TimeRangeView) {
+                    TimeRangeView trv = (TimeRangeView) n;
+                    TimeAndDateFilterList.TimeRange tr;
+                    if(trv.startTime.isBefore(trv.endTime))
+                        tr = new TimeAndDateFilterList.TimeRange(trv.startTime, trv.endTime);
+                    else
+                        tr = new TimeAndDateFilterList.TimeRange(trv.endTime, trv.startTime);
+                    list.add(tr);
+                }
+            }
+            excludedTimeIntervals.setAll(list);
+        });
         
         PopOver exclTimesPop = new PopOver(exclTimesList);
         exclTimesPop.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
