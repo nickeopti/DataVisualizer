@@ -24,6 +24,9 @@ public class TimeRangeView extends HBox {
     public TimeRangeView() {
         super(5);
         
+        startTime = LocalTime.of(7, 0);
+        endTime = LocalTime.of(16, 0);
+        
         startH = new TextField("7");
         startH.setPrefColumnCount(2);
         startH.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
