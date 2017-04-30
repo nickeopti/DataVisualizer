@@ -5,8 +5,12 @@ import graphing.Plotter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -15,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.shape.SVGPath;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.SegmentedButton;
 import statistics.GoodOldWay;
@@ -82,11 +87,14 @@ public class MainUI extends BorderPane {
         ToggleButton son = new ToggleButton("Søn");
         son.setFocusTraversable(false);
         son.setSelected(false);
-        ToggleButton all = new ToggleButton("Samlet");
+        ToggleButton all = new ToggleButton("I alt");
         all.setFocusTraversable(false);
         all.setSelected(false);
+        ToggleButton combined = new ToggleButton("Kombineret");
+        combined.setFocusTraversable(false);
+        combined.setSelected(true);
         
-        SegmentedButton weekDaysSegment = new SegmentedButton(mon, tue, wed, thu, fri, sat, son, all);
+        SegmentedButton weekDaysSegment = new SegmentedButton(mon, tue, wed, thu, fri, sat, son, all, combined);
         weekDaysSegment.setToggleGroup(null);
         weekDaysSegment.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
         
@@ -114,7 +122,13 @@ public class MainUI extends BorderPane {
         exclDatesPop.setTitle("Excluderede datoer");
         exclDatesPop.setDetachable(false);
         
-        Button exclDates = new Button("Excl datoer");
+        SVGPath downArrow0 = new SVGPath();
+        downArrow0.setScaleX(0.4); downArrow0.setScaleY(0.4); downArrow0.setTranslateY(2);
+        downArrow0.setContent("m 0.99414062,1039.8574 a 0.50005,0.50005 0 0 0 -0.34765624,0.8574 L 12,1052.0684 23.353516,1040.7148 a 0.50005,0.50005 0 1 0 -0.707032,-0.707 L 12,1050.6543 1.3535156,1040.0078 a 0.50005,0.50005 0 0 0 -0.35937498,-0.1504 z");
+        Button exclDates = new Button("Excl datoer", downArrow0);
+        exclDates.setGraphicTextGap(0);
+        exclDates.setContentDisplay(ContentDisplay.RIGHT);
+        exclDates.setFocusTraversable(false);
         exclDates.setOnAction(oa -> {
             if(exclDatesPop.isShowing()) {
                 exclDatesPop.hide();
