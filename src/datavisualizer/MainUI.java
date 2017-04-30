@@ -5,10 +5,7 @@ import graphing.Plotter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
@@ -97,8 +94,10 @@ public class MainUI extends BorderPane {
         
         /*** Excluded days and time-intervals ***/
         VBox exclDatesList = new VBox();
+        exclDatesList.setPadding(new Insets(5));
         
         Button addExclDate = new Button("Tilføj");
+        VBox.setMargin(addExclDate, new Insets(5, 0, 0, 0));
         addExclDate.setOnAction(oa -> {
             DateRangeView drv = new DateRangeView();
             drv.close.setOnMouseClicked(me -> {
@@ -109,7 +108,6 @@ public class MainUI extends BorderPane {
             exclDatesList.getChildren().add(exclDatesList.getChildren().size()-1, drv);
         });
         exclDatesList.getChildren().add(addExclDate);
-        exclDatesList.setPadding(new Insets(5));
         
         PopOver exclDatesPop = new PopOver(exclDatesList);
         exclDatesPop.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
