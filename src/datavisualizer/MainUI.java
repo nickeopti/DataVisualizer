@@ -100,7 +100,7 @@ public class MainUI extends BorderPane {
         
         box.getChildren().add(weekDaysSegment);
         
-        /*** Excluded days and time-intervals ***/
+        /*** Excluded days control ***/
         VBox exclDatesList = new VBox();
         exclDatesList.setPadding(new Insets(5));
         
@@ -139,6 +139,46 @@ public class MainUI extends BorderPane {
         addExclDate.fire();
         
         box.getChildren().add(exclDates);
+        
+        /*** Excluded time-intervals control ***/
+        VBox exclTimesList = new VBox();
+        exclTimesList.setPadding(new Insets(5));
+        
+        Button addExclTime = new Button("Tilføj");
+        VBox.setMargin(addExclTime, new Insets(5, 0, 0, 0));
+        addExclTime.setOnAction(oa -> {
+            TimeRangeView trv = new TimeRangeView();
+            trv.close.setOnMouseClicked(me -> {
+                exclTimesList.getChildren().remove(trv);
+                //Implement removing constraints from the data controller
+            });
+            //Implement adding constraints to the data controller
+            exclTimesList.getChildren().add(exclTimesList.getChildren().size()-1, trv);
+        });
+        exclTimesList.getChildren().add(addExclTime);
+        
+        PopOver exclTimesPop = new PopOver(exclTimesList);
+        exclTimesPop.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
+        exclTimesPop.setTitle("Excluderede tidsintervaller");
+        exclTimesPop.setDetachable(false);
+        
+        SVGPath downArrow1 = new SVGPath();
+        downArrow1.setScaleX(0.4); downArrow1.setScaleY(0.4); downArrow1.setTranslateY(2);
+        downArrow1.setContent("m 0.99414062,1039.8574 a 0.50005,0.50005 0 0 0 -0.34765624,0.8574 L 12,1052.0684 23.353516,1040.7148 a 0.50005,0.50005 0 1 0 -0.707032,-0.707 L 12,1050.6543 1.3535156,1040.0078 a 0.50005,0.50005 0 0 0 -0.35937498,-0.1504 z");
+        Button exclTimes = new Button("Excl tider", downArrow1);
+        exclTimes.setGraphicTextGap(0);
+        exclTimes.setContentDisplay(ContentDisplay.RIGHT);
+        exclTimes.setFocusTraversable(false);
+        exclTimes.setOnAction(oa -> {
+            if(exclTimesPop.isShowing()) {
+                exclTimesPop.hide();
+            } else {
+                exclTimesPop.show(exclTimes);
+            }
+        });
+        addExclTime.fire();
+        
+        box.getChildren().add(exclTimes);
         
         return box;
     }
