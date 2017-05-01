@@ -173,21 +173,15 @@ public class ZoomScrollBar extends Region {
             knob.setWidth(valueToPosition(currentMaxValue.get()) - valueToPosition(currentMinValue.get()));
             knob.relocate(valueToPosition(currentMinValue.get())+knobInset(), knobInset());
             
-            //System.out.println("max: " + maximumValue.get() + "\tcurMax" + currentMaxValue.get() + "\n" +
-              //      "min: " + minimumValue.get() + "\tcurMin" + currentMinValue.get());
-            
             boundary.setArcWidth(boundary.getHeight());
             boundary.setArcHeight(boundary.getHeight());
             knob.setArcWidth(knob.getHeight());
             knob.setArcHeight(knob.getHeight());
         } else {
             knob.setWidth(boundary.getWidth()-BOUNDARY_STROKE_WIDTH*2);
-            knob.setHeight(-(valueToPosition(currentMaxValue.get()) - valueToPosition(currentMinValue.get())));
+            knob.setHeight(valueToPosition(currentMinValue.get()) - valueToPosition(currentMaxValue.get()));
             //knob.relocate(knobInset(), valueToPosition(currentMinValue.get()));
             knob.relocate(knobInset(), valueToPosition(minimumValue.get()) - valueToPosition(currentMinValue.get()) + knobInset());
-            
-            //System.out.println("max: " + maximumValue.get() + "\tcurMax" + currentMaxValue.get() + "\n" +
-              //      "min: " + minimumValue.get() + "\tcurMin" + currentMinValue.get());
             
             boundary.setArcWidth(boundary.getWidth());
             boundary.setArcHeight(boundary.getWidth());
