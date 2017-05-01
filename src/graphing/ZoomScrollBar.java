@@ -182,7 +182,7 @@ public class ZoomScrollBar extends Region {
             knob.setArcHeight(knob.getHeight());
         } else {
             knob.setWidth(boundary.getWidth()-BOUNDARY_STROKE_WIDTH*2);
-            knob.setHeight(valueToPosition(currentMaxValue.get()) - valueToPosition(currentMinValue.get()));
+            knob.setHeight(-(valueToPosition(currentMaxValue.get()) - valueToPosition(currentMinValue.get())));
             //knob.relocate(knobInset(), valueToPosition(currentMinValue.get()));
             knob.relocate(knobInset(), valueToPosition(minimumValue.get()) - valueToPosition(currentMinValue.get()) + knobInset());
             
