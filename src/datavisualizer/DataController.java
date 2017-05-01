@@ -1,5 +1,7 @@
 package datavisualizer;
 
+import datainput.DataInput;
+import datainput.NymarkenDataInput;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -26,12 +28,14 @@ public class DataController {
     }
     
     private List<Point> readDataInput() {
-        try {
+        /*try {
             return GoodOldWay.readValuesFromFile();
         } catch (IOException ex) {
             Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);
             return new ArrayList<>();
-        }
+        }*/
+        DataInput input = new NymarkenDataInput("nyedata.txt");
+        return input.readDataPointList();
     }
     
     public List<Point> getRawData() {
@@ -43,6 +47,8 @@ public class DataController {
     }
     
     public List<Point> getComputedData() {
+        System.out.println("Raw List: " + rawData.toString());
+        
         filter.dateInterval = ui.dateRange;
         filter.timeInterval = ui.timeRange;
         
@@ -69,6 +75,8 @@ public class DataController {
         List<Point> computedData = filter.getFilteredList(rawData);
         
         //Average, median, min, max, moving average...
+        
+        System.out.println("Filtered list: " + computedData.toString());
         
         return computedData;
     }

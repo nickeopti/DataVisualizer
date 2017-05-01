@@ -28,6 +28,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -57,7 +58,14 @@ public class DataVisualizer extends Application {
 
         
         MainUI mainUI = new MainUI();
+        DataController dc = new DataController(mainUI);
+        mainUI.getGraph().getPlots().get(0).dataPoints.setAll(dc.getComputedData());
+        
         Scene scene = new Scene(mainUI);
+        scene.setOnKeyPressed(ke -> {
+            if(ke.isShortcutDown() && ke.getCode() == KeyCode.R)
+                mainUI.getGraph().getPlots().get(0).dataPoints.setAll(dc.getComputedData());
+        });
         
         primaryStage.setTitle("Visual Data Analyzer");
         primaryStage.setScene(scene);
@@ -81,8 +89,8 @@ public class DataVisualizer extends Application {
         TimeAndDateFilterList tdfl = new TimeAndDateFilterList();
         tdfl.excludedDays.add(DayOfWeek.SATURDAY);
         tdfl.excludedDays.add(DayOfWeek.SUNDAY);
-        tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(0, 0), LocalTime.of(6, 0)));
-        tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(15, 0), LocalTime.of(23, 59)));
+        //tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(0, 0), LocalTime.of(6, 0)));
+        //tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(15, 0), LocalTime.of(23, 59)));
         
         
         
