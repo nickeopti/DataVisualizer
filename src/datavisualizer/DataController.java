@@ -43,6 +43,9 @@ public class DataController {
     }
     
     public List<Point> getComputedData() {
+        filter.dateInterval = ui.dateRange;
+        filter.timeInterval = ui.timeRange;
+        
         filter.excludedDays.clear();
         if(!ui.mon.isSelected())
             filter.excludedDays.add(DayOfWeek.MONDAY);
@@ -62,8 +65,6 @@ public class DataController {
         filter.excludedDates.clear();
         filter.excludedDates.addAll(ui.excludedDates);
         
-        filter.excludedTimes.clear();
-        filter.excludedTimes.addAll(ui.excludedTimeIntervals);
         
         List<Point> computedData = filter.getFilteredList(rawData);
         
