@@ -5,9 +5,10 @@ package statistics;
  */
 public class Point {
     
-    public double x, y;
+    public long x;
+    public double y;
     
-    public Point(double x, double y) {
+    public Point(long x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -18,7 +19,7 @@ public class Point {
     
     @Override
     public String toString() {
-        return "(" + x + ",\t" + y + ")";
+        return "(" + x + ",\t" + y + ")\n";
     }
     
 }
