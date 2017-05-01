@@ -7,15 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
@@ -37,6 +34,7 @@ import statistics.TimeAndDateFilterList;
 public class MainUI extends BorderPane {
     
     private Graph graph;
+    public ToggleButton mon, tue, wed, thu, fri, sat, sun, all, combined;
     public ObservableList<TimeAndDateFilterList.DateRange> excludedDates;
     public ObservableList<TimeAndDateFilterList.TimeRange> excludedTimeIntervals;
     
@@ -78,35 +76,35 @@ public class MainUI extends BorderPane {
         box.setPadding(new Insets(5, 10, 5, 10));
         
         /*** Weekdays toggle buttons ***/
-        ToggleButton mon = new ToggleButton("Man");
+        mon = new ToggleButton("Man");
         mon.setFocusTraversable(false);
         mon.setSelected(true);
-        ToggleButton tue = new ToggleButton("Tir");
+        tue = new ToggleButton("Tir");
         tue.setFocusTraversable(false);
         tue.setSelected(true);
-        ToggleButton wed = new ToggleButton("Ons");
+        wed = new ToggleButton("Ons");
         wed.setFocusTraversable(false);
         wed.setSelected(true);
-        ToggleButton thu = new ToggleButton("Tor");
+        thu = new ToggleButton("Tor");
         thu.setFocusTraversable(false);
         thu.setSelected(true);
-        ToggleButton fri = new ToggleButton("Fre");
+        fri = new ToggleButton("Fre");
         fri.setFocusTraversable(false);
         fri.setSelected(true);
-        ToggleButton sat = new ToggleButton("Lør");
+        sat = new ToggleButton("Lør");
         sat.setFocusTraversable(false);
         sat.setSelected(false);
-        ToggleButton son = new ToggleButton("Søn");
-        son.setFocusTraversable(false);
-        son.setSelected(false);
-        ToggleButton all = new ToggleButton("I alt");
+        sun = new ToggleButton("Søn");
+        sun.setFocusTraversable(false);
+        sun.setSelected(false);
+        all = new ToggleButton("I alt");
         all.setFocusTraversable(false);
         all.setSelected(false);
-        ToggleButton combined = new ToggleButton("Kombineret");
+        combined = new ToggleButton("Kombineret");
         combined.setFocusTraversable(false);
         combined.setSelected(true);
         
-        SegmentedButton weekDaysSegment = new SegmentedButton(mon, tue, wed, thu, fri, sat, son, all, combined);
+        SegmentedButton weekDaysSegment = new SegmentedButton(mon, tue, wed, thu, fri, sat, sun, all, combined);
         weekDaysSegment.setToggleGroup(null);
         weekDaysSegment.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
         
