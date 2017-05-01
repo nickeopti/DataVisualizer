@@ -56,7 +56,7 @@ public class MainUI extends BorderPane {
         
         excludedDates = FXCollections.observableArrayList();
         //dateRange = new TimeAndDateFilterList.DateRange(LocalDate.now().minusMonths(1), LocalDate.now());
-        dateRange = new TimeAndDateFilterList.DateRange(LocalDate.of(2015, 5, 8), LocalDate.of(2015, 5, 11));
+        dateRange = new TimeAndDateFilterList.DateRange(LocalDate.of(2015, 5, 9), LocalDate.of(2015, 5, 11));
         System.out.println("epoch " + dateRange.startDate.atTime(0, 0).toEpochSecond(ZoneOffset.UTC));
         timeRange = new TimeAndDateFilterList.TimeRange(LocalTime.of(7, 0), LocalTime.of(16, 0));
         
