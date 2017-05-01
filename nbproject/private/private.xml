@@ -7,17 +7,21 @@
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/graphing/ZoomScrollBar.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/datainput/TextFileInput.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/datainput/NymarkenDataInput.java</file>
+            <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/datavisualizer/DateRangeView.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/statistics/Extremes.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/datavisualizer/DataVisualizer.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/datainput/TabSeperatedTextFile.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/statistics/TimeAndDateFilterList.java</file>
+            <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/datavisualizer/MainUI.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/graphing/Plotter.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/statistics/StatisticalValues.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/datainput/DataInput.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/threading/ThreadPoolSingleton.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/statistics/TimeToX.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/statistics/SortPointList.java</file>
+            <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/datavisualizer/DataController.java</file>
             <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/statistics/GoodOldWay.java</file>
+            <file>file:/home/nicke/NetBeansProjects/DataVisualizer/src/datavisualizer/TimeRangeView.java</file>
         </group>
     </open-files>
 </project-private>
