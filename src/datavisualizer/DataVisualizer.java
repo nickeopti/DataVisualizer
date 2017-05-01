@@ -81,8 +81,8 @@ public class DataVisualizer extends Application {
         TimeAndDateFilterList tdfl = new TimeAndDateFilterList();
         tdfl.excludedDays.add(DayOfWeek.SATURDAY);
         tdfl.excludedDays.add(DayOfWeek.SUNDAY);
-        tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(0, 0), LocalTime.of(6, 0)));
-        tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(15, 0), LocalTime.of(23, 59)));
+        //tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(0, 0), LocalTime.of(6, 0)));
+        //tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(15, 0), LocalTime.of(23, 59)));
         
         
         
