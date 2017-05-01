@@ -34,30 +34,36 @@ public class TimeAndDateFilterList {
         }
     }
     
+    public DateRange dateInterval;
+    public TimeRange timeInterval;
     public List<DateRange> excludedDates = new ArrayList<>();
     public List<DayOfWeek> excludedDays = new ArrayList<>();
-    public List<TimeRange> excludedTimes = new ArrayList<>();
     
     public List<Point> getFilteredList(List<Point> list) {
         List<Point> filteredList = new ArrayList<>(list);
         Point p = null;
         outer: for(Iterator<Point> iterator = filteredList.iterator(); iterator.hasNext(); p = iterator.next()) {
             if(p == null) continue;
-            LocalDateTime currentDate = LocalDateTime.ofEpochSecond((long)p.x, 0, ZoneOffset.UTC); //Works for seconds up to 2^53 - which is way longer than necessary! (ca. year 30.000)
+            LocalDateTime pDate = LocalDateTime.ofEpochSecond((long)p.x, 0, ZoneOffset.UTC); //Works for seconds up to 2^53 - which is way longer than necessary! (ca. year 30.000)
+            
+            if(pDate.toLocalDate().isBefore(dateInterval.startDate) || pDate.toLocalDate().isAfter(dateInterval.endDate)) {
+                iterator.remove();
+                continue;
+            }
+            
+            if(pDate.toLocalTime().isBefore(timeInterval.startTime) || pDate.toLocalTime().isAfter(timeInterval.endTime)) {
+                iterator.remove();
+                continue;
+            }
+            
             for(DateRange dr : excludedDates) {
-                if (!(currentDate.toLocalDate().isBefore(dr.startDate) || currentDate.toLocalDate().isAfter(dr.endDate))) {
+                if(!(pDate.toLocalDate().isBefore(dr.startDate) || pDate.toLocalDate().isAfter(dr.endDate))) {
                     iterator.remove();
                     continue outer;
                 }
             }
             for(DayOfWeek dw : excludedDays) {
-                if(currentDate.getDayOfWeek() == dw) {
-                    iterator.remove();
-                    continue outer;
-                }
-            }
-            for(TimeRange tr : excludedTimes) {
-                if(!(currentDate.toLocalTime().isBefore(tr.startTime) || currentDate.toLocalTime().isAfter(tr.endTime))) {
+                if(pDate.getDayOfWeek() == dw) {
                     iterator.remove();
                     continue outer;
                 }
