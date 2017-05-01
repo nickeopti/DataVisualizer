@@ -90,10 +90,14 @@ public class Graph {
     private void setBarValues() {
         double minX = 0, maxX = 0, minY = 0, maxY = 0;
         for(Plotter pl : plots) {
-            minX = Extremes.extremePoint(pl.dataPoints, Extremes.Extreme.MINIMUM, Extremes.Coordinate.X).x;
+            /*minX = Extremes.extremePoint(pl.dataPoints, Extremes.Extreme.MINIMUM, Extremes.Coordinate.X).x;
             maxX = Extremes.extremePoint(pl.dataPoints, Extremes.Extreme.MAXIMUM, Extremes.Coordinate.X).x;
             minY = Extremes.extremePoint(pl.dataPoints, Extremes.Extreme.MINIMUM, Extremes.Coordinate.Y).y;
-            maxY = Extremes.extremePoint(pl.dataPoints, Extremes.Extreme.MAXIMUM, Extremes.Coordinate.Y).y;
+            maxY = Extremes.extremePoint(pl.dataPoints, Extremes.Extreme.MAXIMUM, Extremes.Coordinate.Y).y;*/
+            minX = Extremes.extremePointX(pl.dataPoints, Extremes.Extreme.MINIMUM).x;
+            maxX = Extremes.extremePointX(pl.dataPoints, Extremes.Extreme.MAXIMUM).x;
+            minY = Extremes.extremePointY(pl.dataPoints, Extremes.Extreme.MINIMUM).y;
+            maxY = Extremes.extremePointY(pl.dataPoints, Extremes.Extreme.MAXIMUM).y;
         }
         minXVal.set(minX);
         maxXVal.set(maxX);

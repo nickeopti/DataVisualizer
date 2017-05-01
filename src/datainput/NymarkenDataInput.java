@@ -54,6 +54,7 @@ public class NymarkenDataInput extends TextFileInput {
         int minute = Integer.parseInt(s0.substring(14, 16));
         
         LocalDateTime date = LocalDateTime.of(y, m, d, hour, minute);
+        System.out.println("nymepoch " + date.toEpochSecond(ZoneOffset.UTC));
         
         try {
             double value = Double.parseDouble(input.split(";")[dataCol].replace(',', '.'));

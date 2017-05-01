@@ -37,7 +37,7 @@ public class StatisticalValues {
         }
         
         for(Point p : list) {
-            LocalTime currentTime = LocalDateTime.ofEpochSecond((long)p.x, 0, ZoneOffset.UTC).toLocalTime(); //Works for seconds up to 2^53 - which is way longer than necessary! (ca. year 30.000)
+            LocalTime currentTime = LocalDateTime.ofEpochSecond(p.x, 0, ZoneOffset.UTC).toLocalTime(); //Works for seconds up to 2^53 - which is way longer than necessary! (ca. year 30.000)
             rawValues[currentTime.getHour()*60 + currentTime.getMinute()].add(new Point((currentTime.getHour()*60 + currentTime.getMinute())*60, p.y));
         }
         
@@ -51,7 +51,7 @@ public class StatisticalValues {
         }
         
         for(Point p : list) {
-            LocalDateTime currentTime = LocalDateTime.ofEpochSecond((long)p.x, 0, ZoneOffset.UTC); //Works for seconds up to 2^53 - which is way longer than necessary! (ca. year 30.000)
+            LocalDateTime currentTime = LocalDateTime.ofEpochSecond(p.x, 0, ZoneOffset.UTC); //Works for seconds up to 2^53 - which is way longer than necessary! (ca. year 30.000)
             rawValues[currentTime.getDayOfWeek().getValue()-1].add(p.y);
         }
         
@@ -62,7 +62,7 @@ public class StatisticalValues {
         Point p = null;
         for(int i = 0; i < list.size(); i++) {
             if(p == null) continue;
-            if(p.x == Double.NaN || p.y == Double.NaN) {
+            if( p.y == Double.NaN) {
                 list.remove(i);
                 i--;
             }
