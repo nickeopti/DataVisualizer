@@ -46,7 +46,7 @@ public class Graph {
         vScrollBar.isHorizontal.set(false);
         vScrollBar.minimumValue.bind(minYVal);
         vScrollBar.maximumValue.bind(maxYVal);
-        pane.add(vScrollBar, 0, 0);
+        //pane.add(vScrollBar, 0, 0);
         
         plotPane = new StackPane();
         setupPlotPaneScrollHandling();
