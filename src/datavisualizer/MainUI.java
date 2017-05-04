@@ -18,6 +18,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -285,6 +286,14 @@ public class MainUI extends BorderPane {
         });
         
         lower.getChildren().addAll(new Label(" i tidsintervallet "), startH, new Label(":"), startM, new Label(" - "), endH, new Label(":"), endM);
+        
+        /*** Statistical value selection ***/
+        ComboBox<String> statSel = new ComboBox<>();
+        statSel.getItems().addAll("Gennemsnit", "Median", "Maximum", "Minimmum");
+        statSel.setValue("Gennemsnit");
+        
+        lower.getChildren().addAll(new Label(" "), statSel);
+        
         
         return new VBox(0, lower, upper);
     }
