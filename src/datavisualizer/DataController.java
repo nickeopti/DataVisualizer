@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import statistics.GoodOldWay;
 import statistics.Point;
+import statistics.SortPointList;
 import statistics.TimeAndDateFilterList;
 
 /**
@@ -78,7 +79,11 @@ public class DataController {
         
         System.out.println("Filtered list: " + computedData.toString());
         
-        return computedData;
+        List<Point> sortedList = SortPointList.getSortedList(computedData, true);
+        
+        System.out.println("Sorted list: " + sortedList);
+        
+        return sortedList;
     }
     
 }
