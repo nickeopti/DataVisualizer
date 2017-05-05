@@ -8,6 +8,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -71,11 +72,22 @@ public class MainUI extends BorderPane {
         Stop[] stops = {new Stop(0, Color.GREEN), new Stop(0.7, Color.YELLOW), new Stop(1, Color.RED)};
         plot.plot.setStroke(new LinearGradient(1, 1, 1, 0, true, CycleMethod.NO_CYCLE, stops));
         
-        /*try {
-            plot.dataPoints.setAll(GoodOldWay.readValuesFromFile());
-        } catch (IOException ex) {
-            Logger.getLogger(DataVisualizer.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        g.minYVal.addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            if(g.maxYVal == null || g.minYVal == null) return;
+            Stop[] stops2 = {new Stop((400-g.minYVal.get())/(g.maxYVal.get()/1.1-g.minYVal.get()), Color.GREEN),
+                new Stop((700-g.minYVal.get())/(g.maxYVal.get()/1.1-g.minYVal.get()), Color.YELLOW),
+                new Stop((1000-g.minYVal.get())/(g.maxYVal.get()/1.1-g.minYVal.get()), Color.RED),
+                new Stop((1200-g.minYVal.get())/(g.maxYVal.get()/1.1-g.minYVal.get()), Color.DARKRED)};
+            plot.plot.setStroke(new LinearGradient(1, 1, 1, 0, true, CycleMethod.NO_CYCLE, stops2));
+        });
+        g.maxYVal.addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            if(g.maxYVal == null || g.minYVal == null) return;
+            Stop[] stops2 = {new Stop((400-g.minYVal.get())/(g.maxYVal.get()/1.1-g.minYVal.get()), Color.GREEN),
+                new Stop((700-g.minYVal.get())/(g.maxYVal.get()/1.1-g.minYVal.get()), Color.YELLOW),
+                new Stop((1000-g.minYVal.get())/(g.maxYVal.get()/1.1-g.minYVal.get()), Color.RED),
+                new Stop((1200-g.minYVal.get())/(g.maxYVal.get()/1.1-g.minYVal.get()), Color.DARKRED)};
+            plot.plot.setStroke(new LinearGradient(1, 1, 1, 0, true, CycleMethod.NO_CYCLE, stops2));
+        });
         
         return g;
     }
