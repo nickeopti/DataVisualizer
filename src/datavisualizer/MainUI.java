@@ -5,6 +5,7 @@ import graphing.Plotter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +56,9 @@ public class MainUI extends BorderPane {
         graph = convenient();
         
         excludedDates = FXCollections.observableArrayList();
-        //excludedTimeIntervals = FXCollections.observableArrayList();
-        dateRange = new TimeAndDateFilterList.DateRange(LocalDate.now().minusMonths(1), LocalDate.now());
+        //dateRange = new TimeAndDateFilterList.DateRange(LocalDate.now().minusMonths(1), LocalDate.now());
+        dateRange = new TimeAndDateFilterList.DateRange(LocalDate.of(2015, 5, 9), LocalDate.of(2015, 5, 11));
+        System.out.println("epoch " + dateRange.startDate.atTime(0, 0).toEpochSecond(ZoneOffset.UTC));
         timeRange = new TimeAndDateFilterList.TimeRange(LocalTime.of(7, 0), LocalTime.of(16, 0));
         
         setCenter(graph.pane);

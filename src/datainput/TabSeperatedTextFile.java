@@ -19,7 +19,7 @@ public class TabSeperatedTextFile extends TextFileInput {
         String s0 = input.substring(0, input.indexOf('\t'));
         String s1 = input.substring(input.indexOf('\t') + 1, input.length());
         try {
-            double d0 = Double.parseDouble(s0.replace(',', '.'));
+            long d0 = Long.parseLong(s0.replace(',', '.'));
             double d1 = Double.parseDouble(s1.replace(',', '.'));
             return new Point(d0, d1);
         } catch (NumberFormatException nfe) {}

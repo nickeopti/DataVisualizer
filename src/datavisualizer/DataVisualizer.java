@@ -28,6 +28,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -57,7 +58,14 @@ public class DataVisualizer extends Application {
 
         
         MainUI mainUI = new MainUI();
+        DataController dc = new DataController(mainUI);
+        mainUI.getGraph().getPlots().get(0).dataPoints.setAll(dc.getComputedData());
+        
         Scene scene = new Scene(mainUI);
+        scene.setOnKeyPressed(ke -> {
+            if(ke.isShortcutDown() && ke.getCode() == KeyCode.R)
+                mainUI.getGraph().getPlots().get(0).dataPoints.setAll(dc.getComputedData());
+        });
         
         primaryStage.setTitle("Visual Data Analyzer");
         primaryStage.setScene(scene);

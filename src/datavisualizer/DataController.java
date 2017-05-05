@@ -1,5 +1,7 @@
 package datavisualizer;
 
+import datainput.DataInput;
+import datainput.NymarkenDataInput;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -8,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import statistics.GoodOldWay;
 import statistics.Point;
+import statistics.SortPointList;
+import statistics.StatisticalValues;
 import statistics.TimeAndDateFilterList;
 
 /**
@@ -26,12 +30,14 @@ public class DataController {
     }
     
     private List<Point> readDataInput() {
-        try {
+        /*try {
             return GoodOldWay.readValuesFromFile();
         } catch (IOException ex) {
             Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);
             return new ArrayList<>();
-        }
+        }*/
+        DataInput input = new NymarkenDataInput("data8uger.csv");
+        return input.readDataPointList();
     }
     
     public List<Point> getRawData() {
@@ -43,6 +49,8 @@ public class DataController {
     }
     
     public List<Point> getComputedData() {
+        System.out.println("Raw List: " + rawData.toString());
+        
         filter.dateInterval = ui.dateRange;
         filter.timeInterval = ui.timeRange;
         
@@ -66,11 +74,25 @@ public class DataController {
         filter.excludedDates.addAll(ui.excludedDates);
         
         
-        List<Point> computedData = filter.getFilteredList(rawData);
+        List<Point> filteredData = filter.getFilteredList(rawData);
+        
+        List<Point>[] minuteData = StatisticalValues.listPerMinute(filteredData);
+        List<Point> computedMinuteData = new ArrayList<>();
+        for(List<Point> l : minuteData) {
+            if(!l.isEmpty())
+                computedMinuteData.add(new Point(l.get(0).x , StatisticalValues.median(l)));
+        }
+        
         
         //Average, median, min, max, moving average...
         
-        return computedData;
+        //System.out.println("Filtered list: " + computedData.toString());
+        
+        List<Point> sortedList = SortPointList.getSortedList(computedMinuteData, true);
+        
+        System.out.println("Sorted list: " + sortedList);
+        
+        return sortedList;
     }
     
 }

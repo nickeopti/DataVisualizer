@@ -25,7 +25,7 @@ public class ZoomScrollBar extends Region {
     protected final static double MINIMUM_KNOB_LENGTH = 2*ZOOM_AREA_LENGTH + 5;
     protected final double MINIMUM_LENGTH = 50;
     protected final double MINIMUM_THICKNESS = 10;
-    protected final double PREF_THICKNESS = 15;
+    protected final double PREF_THICKNESS = 10;
     protected final double MAXIMUM_THICKNESS = 25;
     
     protected Rectangle knob;
