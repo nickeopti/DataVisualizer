@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import statistics.Extremes;
 import statistics.GoodOldWay;
 import statistics.Point;
 import statistics.SortPointList;
@@ -79,8 +80,23 @@ public class DataController {
         List<Point>[] minuteData = StatisticalValues.listPerMinute(filteredData);
         List<Point> computedMinuteData = new ArrayList<>();
         for(List<Point> l : minuteData) {
-            if(!l.isEmpty())
-                computedMinuteData.add(new Point(l.get(0).x , StatisticalValues.median(l)));
+            if(!l.isEmpty()) {
+                switch(ui.statSel.getSelectionModel().getSelectedIndex()) {
+                    case 0:
+                        computedMinuteData.add(new Point(l.get(0).x , StatisticalValues.average(l)));
+                        break;
+                    case 1:
+                        computedMinuteData.add(new Point(l.get(0).x , StatisticalValues.median(l)));
+                        break;
+                    case 2:
+                        computedMinuteData.add(Extremes.extremePointX(l, Extremes.Extreme.MAXIMUM));
+                        break;
+                    case 3:
+                        computedMinuteData.add(Extremes.extremePointX(l, Extremes.Extreme.MINIMUM));
+                        break;
+                }
+                
+            }
         }
         
         
