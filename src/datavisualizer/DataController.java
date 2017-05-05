@@ -77,10 +77,10 @@ public class DataController {
                         computedMinuteData.add(new Point(l.get(0).x , StatisticalValues.median(l)));
                         break;
                     case 2: //Maximum
-                        computedMinuteData.add(Extremes.extremePointX(l, Extremes.Extreme.MAXIMUM));
+                        computedMinuteData.add(Extremes.extremePointY(l, Extremes.Extreme.MAXIMUM));
                         break;
                     case 3: //Minimum
-                        computedMinuteData.add(Extremes.extremePointX(l, Extremes.Extreme.MINIMUM));
+                        computedMinuteData.add(Extremes.extremePointY(l, Extremes.Extreme.MINIMUM));
                         break;
                 }
             }

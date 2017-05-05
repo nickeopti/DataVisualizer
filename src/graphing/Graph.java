@@ -26,7 +26,7 @@ public class Graph {
     public ZoomScrollBar hScrollBar, vScrollBar;
     private final ObservableList<Plotter> plots;
     private StackPane plotPane;
-    private DoubleProperty minXVal, maxXVal, minYVal, maxYVal;
+    public final DoubleProperty minXVal, maxXVal, minYVal, maxYVal;
     
     public Graph() {
         pane = new GridPane();

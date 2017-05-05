@@ -3,7 +3,6 @@ package datavisualizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -26,8 +25,8 @@ public class DateRangeView extends HBox {
     
     public DateRangeView() {
         super(5);
-        startDate = LocalDate.now();
-        endDate = LocalDate.now().plusDays(1);
+        startDate = LocalDate.now().minusDays(1);
+        endDate = LocalDate.now();
         
         double width = new Text("10/10/2017").getLayoutBounds().getWidth()*1.7;
         
