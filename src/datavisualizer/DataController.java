@@ -86,6 +86,8 @@ public class DataController {
             }
         }
         
+        System.out.println("maks: " + Extremes.extremePointY(computedMinuteData, Extremes.Extreme.MAXIMUM).y);
+        
         //Moving average?
         
         List<Point> sortedList = SortPointList.getSortedList(computedMinuteData, true);
