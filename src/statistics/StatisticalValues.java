@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -37,8 +36,8 @@ public class StatisticalValues {
         }
         
         for(Point p : list) {
-            LocalTime currentTime = LocalDateTime.ofEpochSecond(p.x, 0, ZoneOffset.UTC).toLocalTime(); //Works for seconds up to 2^53 - which is way longer than necessary! (ca. year 30.000)
-            rawValues[currentTime.getHour()*60 + currentTime.getMinute()].add(new Point((currentTime.getHour()*60 + currentTime.getMinute())*60, p.y));
+            LocalTime currentTime = LocalDateTime.ofEpochSecond(p.x, 0, ZoneOffset.UTC).toLocalTime();
+            rawValues[currentTime.getHour()*60 + currentTime.getMinute()].add(new Point((currentTime.getHour()*60 + currentTime.getMinute()), p.y));
         }
         
         return rawValues;
@@ -51,7 +50,7 @@ public class StatisticalValues {
         }
         
         for(Point p : list) {
-            LocalDateTime currentTime = LocalDateTime.ofEpochSecond(p.x, 0, ZoneOffset.UTC); //Works for seconds up to 2^53 - which is way longer than necessary! (ca. year 30.000)
+            LocalDateTime currentTime = LocalDateTime.ofEpochSecond(p.x, 0, ZoneOffset.UTC);
             rawValues[currentTime.getDayOfWeek().getValue()-1].add(p.y);
         }
         
