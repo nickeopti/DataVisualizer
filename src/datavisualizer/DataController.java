@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import statistics.GoodOldWay;
 import statistics.Point;
 import statistics.SortPointList;
+import statistics.StatisticalValues;
 import statistics.TimeAndDateFilterList;
 
 /**
@@ -35,7 +36,7 @@ public class DataController {
             Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);
             return new ArrayList<>();
         }*/
-        DataInput input = new NymarkenDataInput("nyedata.txt");
+        DataInput input = new NymarkenDataInput("data8uger.csv");
         return input.readDataPointList();
     }
     
@@ -73,13 +74,21 @@ public class DataController {
         filter.excludedDates.addAll(ui.excludedDates);
         
         
-        List<Point> computedData = filter.getFilteredList(rawData);
+        List<Point> filteredData = filter.getFilteredList(rawData);
+        
+        List<Point>[] minuteData = StatisticalValues.listPerMinute(filteredData);
+        List<Point> computedMinuteData = new ArrayList<>();
+        for(List<Point> l : minuteData) {
+            if(!l.isEmpty())
+                computedMinuteData.add(new Point(l.get(0).x , StatisticalValues.median(l)));
+        }
+        
         
         //Average, median, min, max, moving average...
         
-        System.out.println("Filtered list: " + computedData.toString());
+        //System.out.println("Filtered list: " + computedData.toString());
         
-        List<Point> sortedList = SortPointList.getSortedList(computedData, true);
+        List<Point> sortedList = SortPointList.getSortedList(computedMinuteData, true);
         
         System.out.println("Sorted list: " + sortedList);
         
