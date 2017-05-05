@@ -19,7 +19,7 @@ public class Point {
     
     @Override
     public String toString() {
-        return "(" + x + ",\t" + y + ")\n";
+        return "(" + x + ",\t" + y + ")";
     }
     
 }

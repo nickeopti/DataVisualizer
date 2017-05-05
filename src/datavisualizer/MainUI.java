@@ -2,15 +2,12 @@ package datavisualizer;
 
 import graphing.Graph;
 import graphing.Plotter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -37,7 +34,6 @@ import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.SegmentedButton;
-import statistics.GoodOldWay;
 import statistics.TimeAndDateFilterList;
 
 /**
@@ -75,11 +71,11 @@ public class MainUI extends BorderPane {
         Stop[] stops = {new Stop(0, Color.GREEN), new Stop(0.7, Color.YELLOW), new Stop(1, Color.RED)};
         plot.plot.setStroke(new LinearGradient(1, 1, 1, 0, true, CycleMethod.NO_CYCLE, stops));
         
-        try {
+        /*try {
             plot.dataPoints.setAll(GoodOldWay.readValuesFromFile());
         } catch (IOException ex) {
             Logger.getLogger(DataVisualizer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         
         return g;
     }
@@ -92,10 +88,10 @@ public class MainUI extends BorderPane {
         HBox upper = new HBox(10);
         upper.setAlignment(Pos.CENTER_LEFT);
         upper.setPadding(new Insets(5, 10, 5, 10));
+        upper.setSpacing(3);
         HBox lower = new HBox(10);
         lower.setAlignment(Pos.CENTER_LEFT);
         lower.setPadding(new Insets(5, 10, 5, 10));
-        lower.setSpacing(3);
         
         /*** Weekdays toggle buttons ***/
         mon = new ToggleButton("Man");
@@ -130,7 +126,7 @@ public class MainUI extends BorderPane {
         weekDaysSegment.setToggleGroup(null);
         weekDaysSegment.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
         
-        upper.getChildren().add(weekDaysSegment);
+        lower.getChildren().add(weekDaysSegment);
         
         /*** Excluded days control ***/
         VBox exclDatesList = new VBox();
@@ -183,7 +179,7 @@ public class MainUI extends BorderPane {
         });
         addExclDate.fire();
         
-        upper.getChildren().add(exclDates);
+        lower.getChildren().add(exclDates);
         
         /*** Selected date-interval control ***/
         double width = new Text("10/10-2017").getLayoutBounds().getWidth()*1.7;
@@ -222,7 +218,7 @@ public class MainUI extends BorderPane {
         startPicker.setConverter(converter);
         endPicker.setConverter(converter);
         
-        lower.getChildren().addAll(new Label("Fra "), startPicker, new Label(" til "), endPicker);
+        upper.getChildren().addAll(new Label("Fra "), startPicker, new Label(" til "), endPicker);
         
         /*** Selected date-interval control ***/
         TextField startH, endH, startM, endM;
@@ -288,17 +284,17 @@ public class MainUI extends BorderPane {
             timeRange.endTime = LocalTime.of(Integer.parseInt(endH.getText()), Integer.parseInt(endM.getText()));
         });
         
-        lower.getChildren().addAll(new Label(" i tidsintervallet "), startH, new Label(":"), startM, new Label(" - "), endH, new Label(":"), endM);
+        upper.getChildren().addAll(new Label(" i tidsintervallet "), startH, new Label(":"), startM, new Label(" - "), endH, new Label(":"), endM);
         
         /*** Statistical value selection ***/
         statSel = new ComboBox<>();
         statSel.getItems().addAll("Gennemsnit", "Median", "Maximum", "Minimum");
         statSel.setValue("Gennemsnit");
         
-        lower.getChildren().addAll(new Label(" "), statSel);
+        upper.getChildren().addAll(new Label(" "), statSel);
         
         
-        return new VBox(0, lower, upper);
+        return new VBox(0, upper, lower);
     }
     
 }

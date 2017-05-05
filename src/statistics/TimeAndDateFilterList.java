@@ -53,7 +53,6 @@ public class TimeAndDateFilterList {
             if(pDate.toLocalDate().isBefore(dateInterval.startDate) || pDate.toLocalDate().isAfter(dateInterval.endDate)) {
                 filteredList.remove(i);
                 --i;
-                System.out.println("Remove point based on date interval. Epoc " + pDate.toEpochSecond(ZoneOffset.UTC));
                 continue;
             }
             

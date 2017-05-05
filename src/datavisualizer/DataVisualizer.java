@@ -82,24 +82,4 @@ public class DataVisualizer extends Application {
         launch(args);
     }
     
-    private void setupDataForGraph(Graph g) {
-        DataInput input = new NymarkenDataInput("nyedata.txt");
-        List<Point> data = input.readDataPointList();
-        
-        TimeAndDateFilterList tdfl = new TimeAndDateFilterList();
-        tdfl.excludedDays.add(DayOfWeek.SATURDAY);
-        tdfl.excludedDays.add(DayOfWeek.SUNDAY);
-        //tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(0, 0), LocalTime.of(6, 0)));
-        //tdfl.excludedTimes.add(new TimeAndDateFilterList.TimeRange(LocalTime.of(15, 0), LocalTime.of(23, 59)));
-        
-        
-        
-        List<Point>[] q = StatisticalValues.listPerMinute(tdfl.getFilteredList(data));
-        List<Point> fil = new ArrayList<>();
-        for(int i = 1; i < q.length; i++) {
-            fil.add(new Point(i, StatisticalValues.median(q[i])));
-        }
-        g.getPlots().get(0).dataPoints.setAll(fil);
-    }
-    
 }

@@ -2,14 +2,10 @@ package datavisualizer;
 
 import datainput.DataInput;
 import datainput.NymarkenDataInput;
-import java.io.IOException;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import statistics.Extremes;
-import statistics.GoodOldWay;
 import statistics.Point;
 import statistics.SortPointList;
 import statistics.StatisticalValues;
@@ -31,12 +27,6 @@ public class DataController {
     }
     
     private List<Point> readDataInput() {
-        /*try {
-            return GoodOldWay.readValuesFromFile();
-        } catch (IOException ex) {
-            Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ArrayList<>();
-        }*/
         DataInput input = new NymarkenDataInput("data8uger.csv");
         return input.readDataPointList();
     }
@@ -82,31 +72,25 @@ public class DataController {
         for(List<Point> l : minuteData) {
             if(!l.isEmpty()) {
                 switch(ui.statSel.getSelectionModel().getSelectedIndex()) {
-                    case 0:
+                    case 0: //Average
                         computedMinuteData.add(new Point(l.get(0).x , StatisticalValues.average(l)));
                         break;
-                    case 1:
+                    case 1: //Median
                         computedMinuteData.add(new Point(l.get(0).x , StatisticalValues.median(l)));
                         break;
-                    case 2:
+                    case 2: //Maximum
                         computedMinuteData.add(Extremes.extremePointX(l, Extremes.Extreme.MAXIMUM));
                         break;
-                    case 3:
+                    case 3: //Minimum
                         computedMinuteData.add(Extremes.extremePointX(l, Extremes.Extreme.MINIMUM));
                         break;
                 }
-                
             }
         }
         
-        
-        //Average, median, min, max, moving average...
-        
-        //System.out.println("Filtered list: " + computedData.toString());
+        //Moving average?
         
         List<Point> sortedList = SortPointList.getSortedList(computedMinuteData, true);
-        
-        System.out.println("Sorted list: " + sortedList);
         
         return sortedList;
     }
