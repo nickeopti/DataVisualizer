@@ -40,8 +40,6 @@ public class DataController {
     }
     
     public List<Point> getComputedData() {
-        System.out.println("Raw List: " + rawData.toString());
-        
         filter.dateInterval = ui.dateRange;
         filter.timeInterval = ui.timeRange;
         
