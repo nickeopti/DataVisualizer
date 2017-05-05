@@ -47,6 +47,7 @@ public class MainUI extends BorderPane {
     
     private Graph graph;
     public ToggleButton mon, tue, wed, thu, fri, sat, sun, all, combined;
+    public ComboBox<String> statSel;
     public ObservableList<TimeAndDateFilterList.DateRange> excludedDates;
     public final TimeAndDateFilterList.DateRange dateRange;
     public final TimeAndDateFilterList.TimeRange timeRange;
@@ -56,8 +57,8 @@ public class MainUI extends BorderPane {
         graph = convenient();
         
         excludedDates = FXCollections.observableArrayList();
-        //dateRange = new TimeAndDateFilterList.DateRange(LocalDate.now().minusMonths(1), LocalDate.now());
-        dateRange = new TimeAndDateFilterList.DateRange(LocalDate.of(2015, 5, 9), LocalDate.of(2015, 5, 11));
+        dateRange = new TimeAndDateFilterList.DateRange(LocalDate.now().minusMonths(1), LocalDate.now());
+        //dateRange = new TimeAndDateFilterList.DateRange(LocalDate.of(2015, 5, 9), LocalDate.of(2015, 5, 11));
         System.out.println("epoch " + dateRange.startDate.atTime(0, 0).toEpochSecond(ZoneOffset.UTC));
         timeRange = new TimeAndDateFilterList.TimeRange(LocalTime.of(7, 0), LocalTime.of(16, 0));
         
@@ -290,8 +291,8 @@ public class MainUI extends BorderPane {
         lower.getChildren().addAll(new Label(" i tidsintervallet "), startH, new Label(":"), startM, new Label(" - "), endH, new Label(":"), endM);
         
         /*** Statistical value selection ***/
-        ComboBox<String> statSel = new ComboBox<>();
-        statSel.getItems().addAll("Gennemsnit", "Median", "Maximum", "Minimmum");
+        statSel = new ComboBox<>();
+        statSel.getItems().addAll("Gennemsnit", "Median", "Maximum", "Minimum");
         statSel.setValue("Gennemsnit");
         
         lower.getChildren().addAll(new Label(" "), statSel);
