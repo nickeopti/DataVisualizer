@@ -27,7 +27,7 @@ public class DataController {
     }
     
     private List<Point> readDataInput() {
-        DataInput input = new NymarkenDataInput("data8uger.csv");
+        DataInput input = new NymarkenDataInput("data-5.csv");
         return input.readDataPointList();
     }
     
