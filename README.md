@@ -7,4 +7,6 @@ The application is written entirely in JavaFX 8, and is from the very beginning 
 
 Do however note, that this is an application in development - and it is yet in its early development stage, where the different components are being developed and tested, but is only beginning to be combined into something actually useful...
 
+Below is a screenshot of the application in its current version, where it displays the average time-based concentration of carbondioxide, CO2, in PPM, that is present in the air in a class room at Nymarkskolen, Svendborg, Denmark, throughout a schoolday. The time-based values are the average of every shoolday during the specified period of approximately 2.5 months. The data in the screenshot can therefore be thought of as an average schoolday in the perspective of carbondioxide concentration, and the colourcoded graph visualizes that the concentration is greater than ideal troughout most of the day...
+
 ![Screenshot](Screenshot.png)
