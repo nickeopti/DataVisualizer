@@ -6,3 +6,5 @@ It is designed to make it easy to analyse large continual datasets from a range 
 The application is written entirely in JavaFX 8, and is from the very beginning developed upon a principle of multitasking, where background threads are managed through a FixedThreadPoolExecutor singleton.
 
 Do however note, that this is an application in development - and it is yet in its early development stage, where the different components are being developed and tested, but is only beginning to be combined into something actually useful...
+
+![Screenshot](Screenshot.png)
